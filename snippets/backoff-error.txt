@@ -1,0 +1,3 @@
+max backoff 1s below
+min backoff 10s for key
+`supervision_strategy.backoff`

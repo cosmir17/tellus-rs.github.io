@@ -1,0 +1,31 @@
+{% set guide = get_section(path="guide/_index.md") %}
+<nav class="doc-nav" aria-label="Guide">
+  <a class="doc-nav-home{% if current_path == guide.path %} current{% endif %}" href="{{ guide.permalink }}">Guide</a>
+  {% for path in guide.subsections %}
+  {% set part = get_section(path=path) %}
+  <div class="doc-nav-part">
+    <a class="doc-nav-title{% if current_path == part.path %} current{% endif %}" href="{{ part.permalink }}">{{ part.title }}</a>
+    {% if part.pages or part.subsections %}
+    <ul>
+      {% for p in part.pages %}
+      <li><a{% if current_path == p.path %} class="current" aria-current="page"{% endif %} href="{{ p.permalink }}">{{ p.title }}</a></li>
+      {% endfor %}
+      {% for sub_path in part.subsections %}
+      {% set sub = get_section(path=sub_path) %}
+      <li>
+        <a class="doc-nav-sub{% if current_path == sub.path %} current{% endif %}" href="{{ sub.permalink }}">{{ sub.title }}</a>
+        {% if sub.pages %}
+        <ul>
+          {% for p in sub.pages %}
+          <li><a{% if current_path == p.path %} class="current" aria-current="page"{% endif %} href="{{ p.permalink }}">{{ p.title }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <a class="doc-nav-ext" href="{{ config.extra.docs_rs }}">API reference on docs.rs</a>
+</nav>

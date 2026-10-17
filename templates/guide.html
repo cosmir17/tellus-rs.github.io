@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }}: tellus{% endblock title %}
+{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}
+
+{% block content %}
+<div class="wrap doc">
+  {% include "guide-nav.html" %}
+  <article class="doc-body">
+    <div class="depth">Guide</div>
+    <h1>{{ section.title }}</h1>
+    {% if section.description %}<p class="doc-lede">{{ section.description }}</p>{% endif %}
+    <div class="prose-md">{{ section.content | safe }}</div>
+    {% if section.pages %}
+    <ol class="doc-list">
+      {% for p in section.pages %}
+      <li><a href="{{ p.permalink }}"><b>{{ p.title }}</b>{% if p.description %}<span>{{ p.description }}</span>{% endif %}</a></li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+    {% if section.subsections %}
+    <ul class="doc-list doc-parts">
+      {% for path in section.subsections %}
+      {% set part = get_section(path=path) %}
+      <li><a href="{{ part.permalink }}"><b>{{ part.title }}</b>{% if part.description %}<span>{{ part.description }}</span>{% endif %}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </article>
+</div>
+{% endblock content %}

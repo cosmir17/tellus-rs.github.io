@@ -1,0 +1,32 @@
+base_url         = "https://tellus.rs"
+title            = "tellus"
+description      = "Actors for Rust, on solid ground."
+default_language = "en"
+
+compile_sass       = true
+minify_html        = true
+build_search_index = false
+generate_feeds     = false
+feed_filenames     = [ "atom.xml" ]
+
+[markdown]
+insert_anchor_links = "heading"
+smart_punctuation   = false
+github_alerts       = true
+
+[markdown.highlighting]
+error_on_missing_language = true
+style                     = "class"
+theme                     = "github-dark"
+
+[link_checker]
+internal_level = "error"
+external_level = "warn"
+
+[extra]
+version  = "0.3"
+repo     = "https://github.com/tellus-rs/tellus"
+docs_rs  = "https://docs.rs/tellus/latest/tellus/"
+crates   = "https://crates.io/crates/tellus"
+internals = "https://github.com/tellus-rs/tellus/tree/main/docs"
+comparison = "https://tellus-rs.github.io/tellus/comparison/"

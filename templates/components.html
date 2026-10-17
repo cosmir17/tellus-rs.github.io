@@ -1,0 +1,25 @@
+{% component code(path: string, lang: string, title: string, link: string = "", id: string = "", axioms: string = "") %}
+<div class="code"{% if id %} id="{{ id }}" data-show="" data-axioms="{{ axioms }}"{% endif %}>
+  <div class="code-bar"><span>{{ title }}</span>{% if link %}<a href="{{ link }}">source</a>{% endif %}</div>
+  {{ ("```" ~ lang ~ "\n" ~ load_data(path=path, format="plain") ~ "```") | markdown | safe }}
+</div>
+{% endcomponent code %}
+
+{% component logo(accent: string = "var(--accent)") %}
+<svg viewBox="0 0 32 32" aria-hidden="true">
+  <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <path d="M2.6 13h26.8" stroke="currentColor" stroke-width="2.5"/>
+  <path d="M4.2 19.5h23.6M7.6 25.2h16.8" stroke="{{ accent }}" stroke-width="2.5"/>
+</svg>
+{% endcomponent logo %}
+
+{% component example(path: string, anchor: string = "") %}
+{%- set source = load_data(path="tellus/" ~ path, format="plain") | regex_replace(pattern=`^(//!.*\n)+\n*`, rep="") -%}
+{%- if anchor -%}
+{%- set source = (source | split(pat="// ANCHOR: " ~ anchor ~ "\n"))[1] -%}
+{%- set source = (source | split(pat="// ANCHOR_END: " ~ anchor))[0] -%}
+{%- endif -%}
+```rust,name={{ path }}
+{{ source | trim_end }}
+```
+{% endcomponent example %}
