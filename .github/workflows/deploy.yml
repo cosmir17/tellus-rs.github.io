@@ -40,7 +40,7 @@ jobs:
         run: zola check
 
       - name: Build
-        run: zola build
+        run: zola build --base-url "${{ vars.BASE_URL || 'https://tellus.rs' }}"
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'

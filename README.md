@@ -39,6 +39,9 @@ snippet should eventually come from.
 Every push to `main` is checked, built and deployed to GitHub Pages; pull requests are checked and
 built only. The custom domain `tellus.rs` is configured in the repository's Pages settings.
 
+The site is built for `https://tellus.rs` unless the repository variable `BASE_URL` overrides it,
+which is needed as long as the custom domain is not configured.
+
 ## License
 
 The site content and code are licensed under the
