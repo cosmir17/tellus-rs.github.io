@@ -8,11 +8,11 @@
   --panel: #f6f7f3;
   --ink: #1a1e1b;
   --ink-2: #4b544e;
-  --ink-3: #78817a;
+  --ink-3: #5f6660;
   --rule: #c7cdc3;
   --accent: #0b7353;
   --accent-soft: #cfe3d9;
-  --ochre: #a86b12;
+  --ochre: #8b590f;
   --bar: #a2a9a1;
   --f-display: "Bricolage Grotesque", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -25,7 +25,7 @@
     --panel: #201b15;
     --ink: #ece6dc;
     --ink-2: #b4ab9d;
-    --ink-3: #82796c;
+    --ink-3: #8e8476;
     --rule: #3a3229;
     --accent: #4cc99b;
     --accent-soft: #1e3a2f;

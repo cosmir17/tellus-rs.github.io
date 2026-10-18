@@ -7,7 +7,7 @@
 {% set part = get_section(path=page.ancestors[-1]) %}
 <div class="wrap doc">
   {% include "docs-nav.html" %}
-  <article class="doc-body">
+  <article class="doc-body" id="content" tabindex="-1">
     <div class="depth">{{ part.title }}</div>
     <h1>{{ page.title }}</h1>
     {% if page.description %}<p class="doc-lede">{{ page.description }}</p>{% endif %}

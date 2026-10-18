@@ -6,7 +6,7 @@
 {% block content %}
 <div class="wrap doc">
   {% include "docs-nav.html" %}
-  <article class="doc-body">
+  <article class="doc-body" id="content" tabindex="-1">
     <div class="depth">Docs</div>
     <h1>{{ section.title }}</h1>
     {% if section.description %}<p class="doc-lede">{{ section.description }}</p>{% endif %}
@@ -22,7 +22,7 @@
     <ul class="doc-list doc-parts">
       {% for path in section.subsections %}
       {% set part = get_section(path=path) %}
-      <li><a href="{{ part.permalink }}"><b>{{ part.title }}</b>{% if part.description %}<span>{{ part.description }}</span>{% endif %}</a></li>
+      <li><a href="{{ part.permalink }}"><b>{{ part.title }}{% if (part.extra?.status or "") == "coming-soon" %} <span class="soon">coming soon</span>{% endif %}</b>{% if part.description %}<span>{{ part.description }}</span>{% endif %}</a></li>
       {% endfor %}
     </ul>
     {% endif %}
