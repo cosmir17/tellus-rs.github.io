@@ -259,7 +259,7 @@ section.stratum.alt { background: var(--bg-2); }
   font-family: var(--f-display); font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem); line-height: 1.3; color: var(--ink);
   font-weight: 500; border-left: 4px solid var(--accent); padding-left: 18px; max-width: 34ch;
 }
-.diagram { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 18px 10px; overflow-x: auto; }
+.diagram { margin: 0; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 18px 10px; overflow-x: auto; }
 .diagram svg { display: block; width: 100%; min-width: 460px; height: auto; }
 .diagram figcaption { font-size: var(--t-sm); color: var(--ink-3); padding-top: 8px; }
 .sv-life { stroke: var(--ink-3); stroke-dasharray: 3 5; }
@@ -484,3 +484,5 @@ pre.giallo { background: var(--code-bg); color: var(--code-fg); }
 .copy-float { position: relative; }
 .copy-float > .copy-btn { position: absolute; top: 8px; right: 8px; }
 .prose-md .code pre { border-radius: 0; }
+
+.prose-md .diagram { margin-block: 2em; }

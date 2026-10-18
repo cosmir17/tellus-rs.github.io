@@ -61,3 +61,39 @@
 </section>
 {%- endif -%}
 {% endcomponent articles %}
+
+{% component watch_diagram() %}
+<figure class="diagram">
+  <svg id="watch-svg" viewBox="0 0 560 340" role="img" aria-labelledby="watch-svg-title">
+    <title id="watch-svg-title">A device delivers two readings to the group watching it, a third is dropped as a dead letter, the device stops, and the Terminated signal arrives last.</title>
+    <rect class="sv-band" x="420" y="246" width="110" height="34" rx="6"/>
+    <line class="sv-life" x1="100" y1="58" x2="100" y2="320"/>
+    <line class="sv-life" x1="460" y1="58" x2="460" y2="320"/>
+    <rect class="sv-box" x="40" y="16" width="120" height="38" rx="7"/>
+    <text class="sv-lbl" x="100" y="40" text-anchor="middle">device</text>
+    <rect class="sv-box" x="400" y="16" width="120" height="38" rx="7"/>
+    <text class="sv-lbl" x="460" y="40" text-anchor="middle">group</text>
+    <path id="p-m1" class="sv-msg" d="M100 82 L460 112"/>
+    <polygon class="sv-fill-ink" points="460,112 449,106 448,116"/>
+    <text class="sv-msg-t" x="200" y="86">Reading(21.5)</text>
+    <path id="p-m2" class="sv-msg" d="M100 122 L460 152"/>
+    <polygon class="sv-fill-ink" points="460,152 449,146 448,156"/>
+    <text class="sv-msg-t" x="200" y="126">Reading(22.0)</text>
+    <path id="p-m3" class="sv-dead" d="M100 162 L400 187"/>
+    <path class="sv-dead" d="M392 179 l16 16 M408 179 l-16 16" style="stroke-dasharray:none;stroke-width:2.5"/>
+    <text class="sv-dead-t" x="200" y="166">Reading(22.4)</text>
+    <text class="sv-dead-t" x="300" y="214">mailbox full: dead letter</text>
+    <rect class="sv-stop" x="86" y="226" width="28" height="7" rx="2"/>
+    <text class="sv-sm" x="124" y="234">stops</text>
+    <path id="p-t" class="sv-term" d="M100 236 L460 266"/>
+    <polygon class="sv-fill-acc" points="462,266 446,258 446,272"/>
+    <text class="sv-term-t" x="196" y="241">Terminated(device)</text>
+    <text class="sv-sm" x="526" y="300" text-anchor="end">always last</text>
+    <circle r="6" class="sv-fill-ink" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.02;0.16;1" calcMode="linear"><mpath href="#p-m1"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;0.02;0.16;0.17;1"/></circle>
+    <circle r="6" class="sv-fill-ink" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.12;0.26;1" calcMode="linear"><mpath href="#p-m2"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.12;0.13;0.26;0.27;1"/></circle>
+    <circle r="6" class="sv-fill-fault" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.22;0.34;1" calcMode="linear"><mpath href="#p-m3"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.22;0.23;0.34;0.4;1"/></circle>
+    <circle r="8" class="sv-fill-acc" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.46;0.66;1" calcMode="linear"><mpath href="#p-t"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.46;0.47;0.66;0.8;1"/></circle>
+  </svg>
+  <figcaption>The group watches the device: whatever the device delivered arrives before <code>Terminated</code>.</figcaption>
+</figure>
+{% endcomponent watch_diagram %}
