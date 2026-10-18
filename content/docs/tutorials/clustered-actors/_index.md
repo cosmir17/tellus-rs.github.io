@@ -1,9 +1,9 @@
 +++
-title         = "Distributed actors"
+title         = "Clustered actors"
 description   = "Run the device manager on several nodes: bootstrap, remote watch and the receptionist."
 weight        = 3
-template      = "guide.html"
-page_template = "guide-page.html"
+template      = "docs.html"
+page_template = "docs-page.html"
 sort_by       = "weight"
 +++
 

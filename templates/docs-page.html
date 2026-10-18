@@ -6,7 +6,7 @@
 {% block content %}
 {% set part = get_section(path=page.ancestors[-1]) %}
 <div class="wrap doc">
-  {% include "guide-nav.html" %}
+  {% include "docs-nav.html" %}
   <article class="doc-body">
     <div class="depth">{{ part.title }}</div>
     <h1>{{ page.title }}</h1>

@@ -1,7 +1,7 @@
-{% set guide = get_section(path="guide/_index.md") %}
-<nav class="doc-nav" aria-label="Guide">
-  <a class="doc-nav-home{% if current_path == guide.path %} current{% endif %}" href="{{ guide.permalink }}">Guide</a>
-  {% for path in guide.subsections %}
+{% set docs = get_section(path="docs/_index.md") %}
+<nav class="doc-nav" aria-label="Docs">
+  <a class="doc-nav-home{% if current_path == docs.path %} current{% endif %}" href="{{ docs.permalink }}">Docs</a>
+  {% for path in docs.subsections %}
   {% set part = get_section(path=path) %}
   <div class="doc-nav-part">
     <a class="doc-nav-title{% if current_path == part.path %} current{% endif %}" href="{{ part.permalink }}">{{ part.title }}</a>

@@ -30,3 +30,9 @@ docs_rs  = "https://docs.rs/tellus/latest/tellus/"
 crates   = "https://crates.io/crates/tellus"
 internals = "https://github.com/tellus-rs/tellus/tree/main/docs"
 comparison = "https://tellus.rs/tellus/comparison/"
+
+[extra.articles]
+feed     = "https://heikoseeberger.de/atom.xml"
+tag      = "tellus"
+tag_url  = "https://heikoseeberger.de/tags/tellus/"
+timezone = "Asia/Nicosia"
