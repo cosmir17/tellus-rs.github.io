@@ -8,6 +8,5 @@ fn receive(
         let worker = context.spawn(Worker);
         worker.tell(Work(job));
     }
-
     Ok(Control::Continue(count + 1))
 }

@@ -31,7 +31,7 @@
     <div class="wrap">
       <div class="depth">Message handlers</div>
       <div class="split rev">
-      {{<code path="snippets/dispatcher.rs" lang="rust" title="a dispatcher" id="axiom-code" axioms="create:8 send:9 next:12"/>}}
+      {{<code path="snippets/dispatcher.rs" lang="rust" title="a dispatcher" id="axiom-code" axioms="create:8 send:9 next:11"/>}}
       <div class="prose">
         <h2>A message handler is a plain function.</h2>
         <p>Carl Hewitt defined an actor by what it may do in response to a message. A tellus <code>receive</code> does exactly that and nothing more. It runs to completion, so an actor is never halfway through a message with its state in limbo.</p>
@@ -41,7 +41,7 @@
           <button class="axiom" type="button" data-ax="next" aria-pressed="false"><span class="verb">designate</span><span class="hewitt">the behavior for the next message</span><code>Ok(Control::Continue(count + 1))</code></button>
         </div>
         <p>When an actor needs to wait for something, the result arrives as another message, so actor code never awaits. Even event sourcing works this way: the handler returns the events as data, and tellus does the I/O.</p>
-        <a class="more" href="{{ get_url(path="@/docs/explanation/_index.md") }}">Why tellus handlers are synchronous →</a>
+        <a class="more" href="{{ get_url(path="@/docs/explanation/synchronous-handlers.md") }}">Why tellus handlers are synchronous →</a>
       </div>
       </div>
     </div>
@@ -56,48 +56,10 @@
           <p class="claim">Receiving <code>Terminated</code> proves you have seen every message that actor will ever deliver to you.</p>
           <p>Watch any actor with <code>context.watch(&amp;actor)</code>. When it terminates, you get a signal in your ordinary mailbox, ordered behind every message the actor delivered to you. Each of its messages arrived before the signal or was dropped as a dead letter.</p>
           <p>So you can gather results from workers without counting replies, timeouts or extra acknowledgements: when the last worker's signal arrives, you have every result. And <code>unwatch</code> means what it says, even if the signal is already waiting in your mailbox.</p>
-          <a class="more" href="{{ get_url(path="@/docs/explanation/_index.md") }}">How the ordering guarantee works →</a>
+          <a class="more" href="{{ get_url(path="@/docs/explanation/death-watch-ordering.md") }}">How the ordering guarantee works →</a>
         </div>
         <div>
-          <figure class="diagram" style="margin:0">
-            <svg id="watch-svg" viewBox="0 0 560 340" role="img" aria-labelledby="watch-svg-title">
-              <title id="watch-svg-title">A device delivers two readings to the group watching it, a third is dropped as a dead letter, the device stops, and the Terminated signal arrives last.</title>
-              <rect class="sv-band" x="420" y="246" width="110" height="34" rx="6"/>
-              <line class="sv-life" x1="100" y1="58" x2="100" y2="320"/>
-              <line class="sv-life" x1="460" y1="58" x2="460" y2="320"/>
-              <rect class="sv-box" x="40" y="16" width="120" height="38" rx="7"/>
-              <text class="sv-lbl" x="100" y="40" text-anchor="middle">device</text>
-              <rect class="sv-box" x="400" y="16" width="120" height="38" rx="7"/>
-              <text class="sv-lbl" x="460" y="40" text-anchor="middle">group</text>
-
-              <path id="p-m1" class="sv-msg" d="M100 82 L460 112"/>
-              <polygon class="sv-fill-ink" points="460,112 449,106 448,116"/>
-              <text class="sv-msg-t" x="200" y="86">Reading(21.5)</text>
-
-              <path id="p-m2" class="sv-msg" d="M100 122 L460 152"/>
-              <polygon class="sv-fill-ink" points="460,152 449,146 448,156"/>
-              <text class="sv-msg-t" x="200" y="126">Reading(22.0)</text>
-
-              <path id="p-m3" class="sv-dead" d="M100 162 L400 187"/>
-              <path class="sv-dead" d="M392 179 l16 16 M408 179 l-16 16" style="stroke-dasharray:none;stroke-width:2.5"/>
-              <text class="sv-dead-t" x="200" y="166">Reading(22.4)</text>
-              <text class="sv-dead-t" x="300" y="214">mailbox full: dead letter</text>
-
-              <rect class="sv-stop" x="86" y="226" width="28" height="7" rx="2"/>
-              <text class="sv-sm" x="124" y="234">stops</text>
-
-              <path id="p-t" class="sv-term" d="M100 236 L460 266"/>
-              <polygon class="sv-fill-acc" points="462,266 446,258 446,272"/>
-              <text class="sv-term-t" x="196" y="241">Terminated(device)</text>
-              <text class="sv-sm" x="526" y="300" text-anchor="end">always last</text>
-
-              <circle r="6" class="sv-fill-ink" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.02;0.16;1" calcMode="linear"><mpath href="#p-m1"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;0.02;0.16;0.17;1"/></circle>
-              <circle r="6" class="sv-fill-ink" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.12;0.26;1" calcMode="linear"><mpath href="#p-m2"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.12;0.13;0.26;0.27;1"/></circle>
-              <circle r="6" class="sv-fill-fault" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.22;0.34;1" calcMode="linear"><mpath href="#p-m3"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.22;0.23;0.34;0.4;1"/></circle>
-              <circle r="8" class="sv-fill-acc" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.46;0.66;1" calcMode="linear"><mpath href="#p-t"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.46;0.47;0.66;0.8;1"/></circle>
-            </svg>
-            <figcaption>The group watches the device: whatever the device delivered arrives before <code>Terminated</code>.</figcaption>
-          </figure>
+          {{<watch_diagram/>}}
         </div>
       </div>
 

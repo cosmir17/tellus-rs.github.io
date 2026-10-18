@@ -7,5 +7,3 @@ page_template = "docs-page.html"
 sort_by       = "weight"
 aliases       = [ "/guide/explanation/" ]
 +++
-
-These pages are being written.
