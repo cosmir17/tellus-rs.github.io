@@ -6,7 +6,7 @@
       <div>
         <div class="eyebrow"><span class="pill">{{ config.extra.version }}</span> actor framework for Rust <span aria-hidden="true">·</span> built on Tokio <span aria-hidden="true">·</span> Apache 2.0</div>
         <h1>Actors for Rust, on <span class="ground">solid ground.</span></h1>
-        <p class="lede">tellus gives you typed actors as state machines, supervision trees and a death watch you can reason about. Add event sourcing and a cluster when you need them, through the same API.</p>
+        <p class="lede">tellus gives you typed actors as state machines, supervision trees and a death watch you can reason about. Add event sourcing when you need it, and soon a cluster, through the same API.</p>
         <div class="cta">
           <div class="install" id="install"><span class="prompt">$</span><span id="install-cmd">cargo add tellus</span><button type="button" id="copy-btn">copy</button></div>
           <a class="btn btn-primary" href="{{ get_url(path="@/docs/tutorials/getting-started/_index.md") }}">Start the tutorial</a>
@@ -77,7 +77,7 @@
         <div>
           <span class="tag">unwatch</span>
           <h3>Absolute</h3>
-          <p>After <code>unwatch</code> returns, you never receive a terminated signal for that actor, local or remote, even if one was already enqueued.</p>
+          <p>After <code>unwatch</code> returns, you never receive a terminated signal for that actor, even if one was already enqueued.</p>
         </div>
       </div>
     </div>
