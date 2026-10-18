@@ -60,6 +60,52 @@
     });
   }
 
+  const copyIcon = '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg>';
+  const doneIcon = '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 8.5l3 3 7-7"/></svg>';
+  document.querySelectorAll('pre.giallo').forEach((pre) => {
+    const code = pre.querySelector('code');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy-btn';
+    button.setAttribute('aria-label', 'Copy code');
+    button.innerHTML = `<span class="idle">${copyIcon}</span><span class="done">${doneIcon}</span><span class="label">Copy</span>`;
+    const label = button.querySelector('.label');
+    const show = (text) => {
+      button.classList.add('copied');
+      label.textContent = text;
+      setTimeout(() => {
+        button.classList.remove('copied');
+        label.textContent = 'Copy';
+      }, 1600);
+    };
+    const selectCode = () => {
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const selection = getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      show('Selected');
+    };
+    button.addEventListener('click', () => {
+      const text = code.textContent.replace(/\n$/, '');
+      if (window.isSecureContext && navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => show('Copied'), selectCode);
+      } else {
+        selectCode();
+      }
+    });
+
+    const bar = pre.parentElement.querySelector(':scope > .code-bar');
+    if (bar) {
+      bar.append(button);
+    } else {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'copy-float';
+      pre.replaceWith(wrapper);
+      wrapper.append(pre, button);
+    }
+  });
+
   const watchDiagram = document.getElementById('watch-svg');
   if (watchDiagram && matchMedia('(prefers-reduced-motion: reduce)').matches && watchDiagram.pauseAnimations) {
     watchDiagram.pauseAnimations();

@@ -7,9 +7,9 @@
 
 {% component logo(accent: string = "var(--accent)") %}
 <svg viewBox="0 0 32 32" aria-hidden="true">
+  <path d="M2.33 13h27.35" stroke="currentColor" stroke-width="2.5"/>
+  <path d="M2.44 19.5h27.11M5.45 25.2h21.11" stroke="{{ accent }}" stroke-width="2.5"/>
   <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
-  <path d="M2.6 13h26.8" stroke="currentColor" stroke-width="2.5"/>
-  <path d="M4.2 19.5h23.6M7.6 25.2h16.8" stroke="{{ accent }}" stroke-width="2.5"/>
 </svg>
 {% endcomponent logo %}
 
@@ -18,8 +18,46 @@
 {%- if anchor -%}
 {%- set source = (source | split(pat="// ANCHOR: " ~ anchor ~ "\n"))[1] -%}
 {%- set source = (source | split(pat="// ANCHOR_END: " ~ anchor))[0] -%}
+{%- set first_line = (source | split(pat="\n"))[0] -%}
+{%- set indent = (first_line | length) - (first_line | trim_start | length) -%}
+{%- if indent > 0 -%}
+{%- set source = source | regex_replace(pattern="(?m)^ {" ~ indent ~ "}", rep="") -%}
 {%- endif -%}
-```rust,name={{ path }}
+{%- endif -%}
+<div class="code">
+<div class="code-bar"><span>{{ path }}</span></div>
+
+```rust
 {{ source | trim_end }}
 ```
+
+</div>
 {% endcomponent example %}
+
+{% component articles(url: string, tag: string, timezone: string, tag_url: string) %}
+{%- set feed = load_data(url=url, format="xml", required=false) -%}
+{%- if feed -%}
+{%- set entries = feed.feed.entry if feed.feed.entry is array else [feed.feed.entry] -%}
+<section class="stratum" id="articles">
+  <div class="wrap">
+    <div class="depth">Articles</div>
+    <div class="split">
+      <div class="prose">
+        <h2>The thinking behind tellus.</h2>
+        <p>Heiko Seeberger explains the design decisions behind tellus in depth on his blog.</p>
+        <a class="more" href="{{ tag_url }}">All posts tagged {{ tag }} →</a>
+      </div>
+      <ol class="articles">
+        {%- for entry in entries %}
+        {%- set categories = entry?.category or [] -%}
+        {%- set categories = categories if categories is array else [categories] -%}
+        {%- if tag in [category["@term"] for category in categories] %}
+        <li><a href="{{ entry.link['@href'] }}"><time datetime="{{ entry.published }}">{{ entry.published | date(format="%B %-d, %Y", timezone=timezone) }}</time><b>{{ entry.title }}</b></a></li>
+        {%- endif -%}
+        {%- endfor %}
+      </ol>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% endcomponent articles %}

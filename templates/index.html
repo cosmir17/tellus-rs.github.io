@@ -9,19 +9,18 @@
         <p class="lede">tellus gives you typed actors as state machines, supervision trees and a death watch you can reason about. Add event sourcing and a cluster when you need them, through the same API.</p>
         <div class="cta">
           <div class="install" id="install"><span class="prompt">$</span><span id="install-cmd">cargo add tellus</span><button type="button" id="copy-btn">copy</button></div>
-          <a class="btn btn-primary" href="{{ get_url(path="@/guide/tutorials/getting-started/_index.md") }}">Start the tutorial</a>
+          <a class="btn btn-primary" href="{{ get_url(path="@/docs/tutorials/getting-started/_index.md") }}">Start the tutorial</a>
           <a class="btn btn-ghost" href="{{ config.extra.docs_rs }}">API docs</a>
         </div>
       </div>
 
       <div class="core" aria-label="The layers of tellus, from Tokio at the bottom to clustering at the top">
         <div class="core-head"><span>tellus, a core sample</span><span>feature</span></div>
-        <div class="layer l5"><div class="rock" style="height:58px"></div><div class="log"><a href="#handlers"><b>Message handlers</b><span>Typed state machines, plain functions.</span></a></div></div>
-        <div class="layer l4"><div class="rock" style="height:64px"></div><div class="log"><a href="#watch"><b>Death watch</b><span>Terminated arrives after every message.</span></a></div></div>
-        <div class="layer l3"><div class="rock" style="height:50px"></div><div class="log"><a href="#supervision"><b>Supervision</b><span>Restart with backoff, or stop.</span></a></div></div>
-        <div class="layer l2 opt"><div class="rock" style="height:58px"></div><div class="log"><a href="#persistence"><b>Event sourcing</b><span>Replay, snapshots, fencing. <code>persistence</code></span></a></div></div>
-        <div class="layer l1 opt"><div class="rock" style="height:58px"></div><div class="log"><a href="#cluster"><b>Cluster</b><span>Remote tell, ask and watch over QUIC. <code>cluster</code></span></a></div></div>
-        <div class="layer l6"><div class="rock" style="height:40px"></div><div class="log"><b>Tokio</b><span>One task per actor.</span></div></div>
+        <div class="layer l5"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#handlers"><b>Message handlers</b><span>Typed state machines, plain functions.</span></a></div></div>
+        <div class="layer l4"><div class="rock" style="min-height:64px"></div><div class="log"><a href="#watch"><b>Death watch</b><span>Terminated arrives after every message.</span></a></div></div>
+        <div class="layer l3"><div class="rock" style="min-height:50px"></div><div class="log"><a href="#supervision"><b>Supervision</b><span>Restart with backoff, or stop.</span></a></div></div>
+        <div class="layer l2 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#persistence"><b>Event sourcing</b><span>Replay, snapshots, fencing. <code>persistence</code></span></a></div></div>
+        <div class="layer l1 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#cluster"><b>Cluster</b><span>Remote tell, ask and watch over QUIC. <code>cluster</code></span></a></div></div>
         <div class="core-foot"><i class="std">always on</i><i>opt-in feature</i></div>
       </div>
     </div>
@@ -42,7 +41,7 @@
           <button class="axiom" type="button" data-ax="next" aria-pressed="false"><span class="verb">designate</span><span class="hewitt">the behavior for the next message</span><code>Ok(Control::Continue(count + 1))</code></button>
         </div>
         <p>When an actor needs to wait for something, the result arrives as another message, so actor code never awaits. Even event sourcing works this way: the handler returns the events as data, and tellus does the I/O.</p>
-        <a class="more" href="{{ get_url(path="@/blog/_index.md") }}">Why tellus handlers are synchronous →</a>
+        <a class="more" href="{{ get_url(path="@/docs/explanation/_index.md") }}">Why tellus handlers are synchronous →</a>
       </div>
       </div>
     </div>
@@ -57,31 +56,31 @@
           <p class="claim">Receiving <code>Terminated</code> proves you have seen every message that actor will ever deliver to you.</p>
           <p>Watch any actor with <code>context.watch(&amp;actor)</code>. When it terminates, you get a signal in your ordinary mailbox, ordered behind every message the actor delivered to you. Each of its messages arrived before the signal or was dropped as a dead letter.</p>
           <p>So you can gather results from workers without counting replies, timeouts or extra acknowledgements: when the last worker's signal arrives, you have every result. And <code>unwatch</code> means what it says, even if the signal is already waiting in your mailbox.</p>
-          <a class="more" href="{{ get_url(path="@/guide/explanation/_index.md") }}">How the ordering guarantee works →</a>
+          <a class="more" href="{{ get_url(path="@/docs/explanation/_index.md") }}">How the ordering guarantee works →</a>
         </div>
         <div>
           <figure class="diagram" style="margin:0">
             <svg id="watch-svg" viewBox="0 0 560 340" role="img" aria-labelledby="watch-svg-title">
-              <title id="watch-svg-title">A worker delivers two messages to its watcher, a third is dropped as a dead letter, the worker stops, and the Terminated signal arrives last.</title>
+              <title id="watch-svg-title">A device delivers two readings to the group watching it, a third is dropped as a dead letter, the device stops, and the Terminated signal arrives last.</title>
               <rect class="sv-band" x="420" y="246" width="110" height="34" rx="6"/>
               <line class="sv-life" x1="100" y1="58" x2="100" y2="320"/>
               <line class="sv-life" x1="460" y1="58" x2="460" y2="320"/>
               <rect class="sv-box" x="40" y="16" width="120" height="38" rx="7"/>
-              <text class="sv-lbl" x="100" y="40" text-anchor="middle">worker</text>
+              <text class="sv-lbl" x="100" y="40" text-anchor="middle">device</text>
               <rect class="sv-box" x="400" y="16" width="120" height="38" rx="7"/>
-              <text class="sv-lbl" x="460" y="40" text-anchor="middle">watcher</text>
+              <text class="sv-lbl" x="460" y="40" text-anchor="middle">group</text>
 
               <path id="p-m1" class="sv-msg" d="M100 82 L460 112"/>
               <polygon class="sv-fill-ink" points="460,112 449,106 448,116"/>
-              <text class="sv-msg-t" x="200" y="86">Partial(325)</text>
+              <text class="sv-msg-t" x="200" y="86">Reading(21.5)</text>
 
               <path id="p-m2" class="sv-msg" d="M100 122 L460 152"/>
               <polygon class="sv-fill-ink" points="460,152 449,146 448,156"/>
-              <text class="sv-msg-t" x="200" y="126">Partial(950)</text>
+              <text class="sv-msg-t" x="200" y="126">Reading(22.0)</text>
 
               <path id="p-m3" class="sv-dead" d="M100 162 L400 187"/>
               <path class="sv-dead" d="M392 179 l16 16 M408 179 l-16 16" style="stroke-dasharray:none;stroke-width:2.5"/>
-              <text class="sv-dead-t" x="200" y="166">Partial(1575)</text>
+              <text class="sv-dead-t" x="200" y="166">Reading(22.4)</text>
               <text class="sv-dead-t" x="300" y="214">mailbox full: dead letter</text>
 
               <rect class="sv-stop" x="86" y="226" width="28" height="7" rx="2"/>
@@ -89,7 +88,7 @@
 
               <path id="p-t" class="sv-term" d="M100 236 L460 266"/>
               <polygon class="sv-fill-acc" points="462,266 446,258 446,272"/>
-              <text class="sv-term-t" x="196" y="241">Terminated(worker)</text>
+              <text class="sv-term-t" x="196" y="241">Terminated(device)</text>
               <text class="sv-sm" x="526" y="300" text-anchor="end">always last</text>
 
               <circle r="6" class="sv-fill-ink" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.02;0.16;1" calcMode="linear"><mpath href="#p-m1"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;0.02;0.16;0.17;1"/></circle>
@@ -97,7 +96,7 @@
               <circle r="6" class="sv-fill-fault" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.22;0.34;1" calcMode="linear"><mpath href="#p-m3"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.22;0.23;0.34;0.4;1"/></circle>
               <circle r="8" class="sv-fill-acc" opacity="0"><animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.46;0.66;1" calcMode="linear"><mpath href="#p-t"/></animateMotion><animate attributeName="opacity" dur="6s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.46;0.47;0.66;0.8;1"/></circle>
             </svg>
-            <figcaption>Message values from the <code>scatter_gather</code> example, where a gatherer collects the partial sums of its workers.</figcaption>
+            <figcaption>The group watches the device: whatever the device delivered arrives before <code>Terminated</code>.</figcaption>
           </figure>
         </div>
       </div>
@@ -130,7 +129,6 @@
         <h2>Let it crash, then restart it calmly.</h2>
         <p>Actors form a tree. When <code>init</code> or <code>receive</code> returns an error or panics, the actor's supervision strategy decides: <code>Stop</code> terminates it, <code>Restart</code> stops its children and runs <code>init</code> again for a fresh state, keeping the actor's address and mailbox.</p>
         <p>Restarts back off exponentially between <code>min</code> and <code>max</code>. More than <code>max_restarts</code> consecutive failures stop the actor, and running for <code>reset_after</code> without failure starts the count afresh. Stopping always goes bottom-up: children first, then the parent.</p>
-        <p>The whole configuration deserializes from your config files, with readable durations, and contradicting bounds are rejected rather than silently repaired.</p>
       </div>
       <div>
         <figure class="backoff" style="margin:0">
@@ -159,9 +157,8 @@
             <text class="bo-lbl" x="540" y="112" text-anchor="end">4th failure: stop</text>
           </svg>
         </figure>
-        <div class="config-pair">
+        <div class="config-single">
           {{<code path="snippets/supervision.toml" lang="toml" title="config.toml"/>}}
-          {{<code path="snippets/backoff-error.txt" lang="txt" title="when it's wrong"/>}}
         </div>
       </div>
       </div>
@@ -268,50 +265,26 @@ TIMELINE
     </div>
   </section>
 
-  <section class="stratum" id="akka">
-    <div class="wrap">
-      <div class="depth">Coming from Akka</div>
-      <div class="prose">
-        <h2>You already know most of tellus.</h2>
-        <p>tellus is strongly influenced by Akka Typed. Here is where your concepts live.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Akka Typed</th><th>tellus</th></tr></thead>
-          <tbody>
-            <tr><td><code>Behaviors.receive</code></td><td><code>Actor::receive</code>, taking the state by value</td></tr>
-            <tr><td>returning the next behavior, <code>Behaviors.same</code></td><td><code>Control::Continue(state)</code></td></tr>
-            <tr><td><code>Behaviors.stopped</code></td><td><code>Control::Stop</code></td></tr>
-            <tr><td><code>ref ! msg</code></td><td><code>actor.tell(msg)</code></td></tr>
-            <tr><td><code>ask</code>, <code>context.ask</code></td><td><code>ActorRef::ask</code> from outside, <code>context.reply_to</code> between actors</td></tr>
-            <tr><td><code>context.watch</code> and the <code>Terminated</code> signal</td><td><code>context.watch</code> and <code>Incoming::Terminated</code><span class="note">plus the ordering guarantee</span></td></tr>
-            <tr><td><code>SupervisorStrategy.restartWithBackoff</code></td><td><code>SupervisionStrategy::Restart</code> with a <code>RestartPolicy</code></td></tr>
-            <tr><td><code>EventSourcedBehavior</code></td><td><code>EventSourced</code> with <code>Effect</code></td></tr>
-            <tr><td>Akka Cluster, <code>Receptionist</code>, distributed pub-sub</td><td>the <code>cluster</code> feature, <code>receptionist</code>, <code>pubsub</code></td></tr>
-            <tr><td><code>BehaviorTestKit</code></td><td><code>testing::TestContext</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+  {{<articles url={config.extra.articles.feed} tag={config.extra.articles.tag} timezone={config.extra.articles.timezone} tag_url={config.extra.articles.tag_url}/>}}
 
-  <section class="stratum alt" id="guide">
+  <section class="stratum alt" id="get-started">
     <div class="wrap">
       <div class="depth">Get started</div>
       <div class="split">
       <div class="prose">
         <h2>Start digging.</h2>
-        <p>Add tellus and Tokio to your project, then work through the examples. Each one builds on the features of the previous ones.</p>
+        <p>Add tellus and Tokio to your project, then work through the getting started tutorial. Each step is a complete program and builds on the previous one.</p>
         {{<code path="snippets/install.sh" lang="sh" title="shell"/>}}
-        <a class="btn btn-primary" href="{{ get_url(path="@/guide/tutorials/getting-started/_index.md") }}" style="justify-self:start">Start the tutorial</a>
+        <a class="btn btn-primary" href="{{ get_url(path="@/docs/tutorials/getting-started/_index.md") }}" style="justify-self:start">Start the tutorial</a>
       </div>
       <ol class="trail">
-        <li><b>hello</b><span>One actor handles one message and stops.</span></li>
-        <li><b>counter</b><span>Both send modes: <code>tell</code> without waiting, <code>ask</code> with a timeout.</span></li>
-        <li><b>scatter_gather</b><span>Spread work across workers and use the watch guarantee to know when all results are in.</span></li>
-        <li><b>supervision</b><span>A flaky worker under <code>Restart</code>: what a restart rebuilds and what it keeps.</span></li>
-        <li><b>work_pulling</b><span>Workers pull jobs when ready, so a mailbox of capacity one is enough.</span></li>
-        <li><b>device_manager</b><span>The capstone, after Akka's IoT example: a dynamic hierarchy, registry pruning by watch, restarting devices.</span></li>
+        <li><b>Hello, tellus</b><span>One actor handles one message and stops.</span></li>
+        <li><b>A device actor</b><span>State as a value, <code>tell</code> without waiting, <code>ask</code> with a timeout.</span></li>
+        <li><b>A group of devices</b><span>Child actors spawned on demand, stopped bottom-up.</span></li>
+        <li><b>Watching devices</b><span>Learn when an actor is gone, after all of its messages.</span></li>
+        <li><b>Asking all devices</b><span>A query actor per request that cannot hang.</span></li>
+        <li><b>When devices fail</b><span>Restart with backoff, and stop for good.</span></li>
+        <li><b>A device manager</b><span>One more level on top, after the <a href="https://pekko.apache.org/docs/pekko/current/typed/guide/tutorial.html">IoT example</a> of Apache Pekko.</span></li>
       </ol>
       </div>
     </div>
