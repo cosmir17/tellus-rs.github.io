@@ -1,0 +1,95 @@
+@font-face { font-family: "Bricolage Grotesque"; src: url("https://tellus.rs/fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; font-stretch: 75% 100%; font-display: swap; }
+@font-face { font-family: "Atkinson Hyperlegible"; src: url("https://tellus.rs/fonts/atkinson-hyperlegible-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Atkinson Hyperlegible"; src: url("https://tellus.rs/fonts/atkinson-hyperlegible-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("https://tellus.rs/fonts/jetbrains-mono.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+
+:root {
+  --bg: #eceee8;
+  --panel: #f6f7f3;
+  --ink: #1a1e1b;
+  --ink-2: #4b544e;
+  --ink-3: #78817a;
+  --rule: #c7cdc3;
+  --accent: #0b7353;
+  --accent-soft: #cfe3d9;
+  --ochre: #a86b12;
+  --bar: #a2a9a1;
+  --f-display: "Bricolage Grotesque", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15120e;
+    --panel: #201b15;
+    --ink: #ece6dc;
+    --ink-2: #b4ab9d;
+    --ink-3: #82796c;
+    --rule: #3a3229;
+    --accent: #4cc99b;
+    --accent-soft: #1e3a2f;
+    --ochre: #e3a64c;
+    --bar: #5c554b;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 1.02rem; line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+code { font-family: var(--f-mono); font-size: 0.88em; }
+.wrap { max-width: 1000px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.top { border-bottom: 1px solid var(--rule); background: var(--bg); }
+.top .wrap { display: flex; align-items: center; gap: 24px; min-height: 60px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-family: var(--f-display); font-weight: 750; font-size: 1.35rem; letter-spacing: -0.02em; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-left: auto; font-size: 0.9rem; }
+.nav a { color: var(--ink-2); text-decoration: none; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--accent); }
+
+main.wrap { padding-block: 40px 72px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
+h1 { font-family: var(--f-display); font-weight: 750; font-variation-settings: "wdth" 85; font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; letter-spacing: -0.01em; margin: 0; }
+h2 { font-family: var(--f-display); font-weight: 700; font-variation-settings: "wdth" 88; font-size: 1.35rem; line-height: 1.2; margin: 2.4em 0 0.7em; }
+.lede { color: var(--ink-2); font-size: 1.12rem; margin: 12px 0 28px; max-width: 64ch; }
+
+.meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 20px; margin: 0; padding: 16px 20px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; font-size: 0.9rem; }
+.meta dt { font-family: var(--f-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); padding-top: 2px; }
+.meta dd { margin: 0; overflow-wrap: anywhere; }
+
+.caveats { margin: 28px 0; padding: 18px 22px; background: var(--panel); border: 1px solid var(--rule); border-left: 4px solid var(--ochre); border-radius: 10px; font-size: 0.93rem; color: var(--ink-2); }
+.caveats h2 { margin: 0 0 8px; font-size: 1.08rem; color: var(--ink); }
+.caveats ol { margin: 0; padding-left: 1.2rem; }
+.caveats li { margin: 6px 0; }
+.caveats strong { color: var(--ink); }
+
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+th, td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-family: var(--f-mono); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); border-bottom: 2px solid var(--ink); }
+td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+td.barcell { width: 40%; padding-left: 16px; }
+.bar { display: block; height: 10px; background: var(--bar); border-radius: 2px; min-width: 2px; }
+tr.own td:first-child { font-weight: 700; color: var(--accent); }
+tr.own .bar { background: var(--accent); }
+
+.runs { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.runs a { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); font-family: var(--f-mono); }
+.runs a:hover { color: var(--accent); }
+.runs .note { color: var(--ink-3); font-family: var(--f-body); font-size: 0.9rem; }
+.runs .latest { font-weight: 700; color: var(--accent); }
+
+.chart { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px 10px; margin: 0 0 18px; }
+.chart h3 { margin: 0 0 6px; font-family: var(--f-mono); font-size: 0.85rem; font-weight: 600; color: var(--ink-2); }
+.charts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: 0 18px; }
+
+button { font: inherit; font-size: 0.9rem; color: var(--ink); background: transparent; border: 1px solid var(--rule); border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+button:hover { border-color: var(--ink-3); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--ink-3); font-size: 0.88rem; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; }
