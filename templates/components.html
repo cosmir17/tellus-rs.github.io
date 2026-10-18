@@ -36,8 +36,6 @@
 
 {% component articles(url: string, tag: string, timezone: string, tag_url: string) %}
 {%- set feed = load_data(url=url, format="xml", required=false) -%}
-{%- if feed -%}
-{%- set entries = feed.feed.entry if feed.feed.entry is array else [feed.feed.entry] -%}
 <section class="stratum" id="articles">
   <div class="wrap">
     <div class="depth">Articles</div>
@@ -47,6 +45,8 @@
         <p>Heiko Seeberger explains the design decisions behind tellus in depth on his blog.</p>
         <a class="more" href="{{ tag_url }}">All posts tagged {{ tag }} →</a>
       </div>
+      {%- if feed %}
+      {%- set entries = feed.feed.entry if feed.feed.entry is array else [feed.feed.entry] %}
       <ol class="articles">
         {%- for entry in entries %}
         {%- set categories = entry?.category or [] -%}
@@ -56,10 +56,12 @@
         {%- endif -%}
         {%- endfor %}
       </ol>
+      {%- else %}
+      <p class="articles-fallback">The list of articles is not available right now. Find all posts about tellus on <a href="{{ tag_url }}">Heiko Seeberger's blog</a>.</p>
+      {%- endif %}
     </div>
   </div>
 </section>
-{%- endif -%}
 {% endcomponent articles %}
 
 {% component watch_diagram() %}

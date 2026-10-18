@@ -20,7 +20,7 @@
         <div class="layer l4"><div class="rock" style="min-height:64px"></div><div class="log"><a href="#watch"><b>Death watch</b><span>Terminated arrives after every message.</span></a></div></div>
         <div class="layer l3"><div class="rock" style="min-height:50px"></div><div class="log"><a href="#supervision"><b>Supervision</b><span>Restart with backoff, or stop.</span></a></div></div>
         <div class="layer l2 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#persistence"><b>Event sourcing</b><span>Replay, snapshots, fencing. <code>persistence</code></span></a></div></div>
-        <div class="layer l1 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#cluster"><b>Cluster</b><span>Remote tell, ask and watch over QUIC. <code>cluster</code></span></a></div></div>
+        <div class="layer l1 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#cluster"><b>Cluster <span class="soon">coming soon</span></b><span>Remote tell, ask and watch over QUIC. <code>cluster</code></span></a></div></div>
         <div class="core-foot"><i class="std">always on</i><i>opt-in feature</i></div>
       </div>
     </div>
@@ -70,7 +70,7 @@
           <p>The signal is ordered behind every delivered message, it also proves the actor's destructors have run, and it is delivered even when a bounded mailbox is full.</p>
         </div>
         <div>
-          <span class="tag">across nodes</span>
+          <span class="tag">across nodes <span class="soon">coming soon</span></span>
           <h3>Same API, two tiers</h3>
           <p>A real termination keeps the full local contract over the wire. If a node is downed instead, the synthesized signal guarantees that no message from that actor is ever delivered through this endpoint again.</p>
         </div>
@@ -149,13 +149,13 @@
 
   <section class="stratum cluster" id="cluster">
     <div class="wrap">
-      <div class="depth">Cluster <code>cluster</code></div>
+      <div class="depth">Cluster <code>cluster</code> <span class="soon">coming soon</span></div>
       <div class="split">
         <div class="prose">
           <h2>Same API, many nodes.</h2>
         </div>
         <div class="prose" style="align-self:end">
-          <p><code>ActorRef</code> is serializable, so a message can carry a reference to an actor on any node. You <code>tell</code>, <code>ask</code> and <code>watch</code> remote actors exactly like local ones. Nodes find each other through seed discovery, gossip their membership, and agree on who is gone.</p>
+          <p>With the upcoming <code>cluster</code> feature, <code>ActorRef</code> becomes serializable, so a message can carry a reference to an actor on any node. You will <code>tell</code>, <code>ask</code> and <code>watch</code> remote actors exactly like local ones. Nodes will find each other through seed discovery, gossip their membership, and agree on who is gone. It is not part of a release yet.</p>
         </div>
       </div>
 
@@ -182,6 +182,7 @@ TIMELINE
         </div>
       </div>
 
+      <p class="soon-note">What the <code>cluster</code> feature brings, not released yet:</p>
       <div class="features">
         <div><h3>QUIC with TLS</h3><p>Transport over quinn with TLS included, and per-sender FIFO across the wire.</p></div>
         <div><h3>Seed discovery</h3><p>Fixed seeds, DNS SRV or A/AAAA records, or Kubernetes pods by label selector.</p></div>
@@ -192,8 +193,8 @@ TIMELINE
       </div>
 
       <div class="config-pair" style="margin-top:32px">
-        {{<code path="snippets/cluster-default.yaml" lang="yaml" title="config/default.yaml"/>}}
-        {{<code path="snippets/cluster-k8s.yaml" lang="yaml" title="config/k8s.yaml"/>}}
+        {{<code path="snippets/cluster-default.yaml" lang="yaml" title="config/default.yaml, upcoming"/>}}
+        {{<code path="snippets/cluster-k8s.yaml" lang="yaml" title="config/k8s.yaml, upcoming"/>}}
       </div>
 
       <div class="next-up"><span>On the roadmap:</span><span class="pill">cluster singleton</span><span class="pill">sharding</span></div>
