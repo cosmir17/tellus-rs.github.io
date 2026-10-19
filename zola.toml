@@ -24,7 +24,6 @@ internal_level = "error"
 external_level = "warn"
 
 [extra]
-version  = "0.3"
 repo     = "https://github.com/tellus-rs/tellus"
 docs_rs  = "https://docs.rs/tellus/latest/tellus/"
 crates   = "https://crates.io/crates/tellus"

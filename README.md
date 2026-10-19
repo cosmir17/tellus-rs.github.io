@@ -30,7 +30,8 @@ line removed from every line:
 relative to the site root and a title, which the landing page uses.
 
 The submodule is pinned to the latest tellus release, so the docs match the crate on crates.io.
-After a release, pin it to the new tag and update `version` in `zola.toml`:
+After every release, pin it to the new tag. The version on the landing page is read from the
+submodule, so pinning is the only step:
 
 ```shell
 just pin-tellus tellus-v0.4.0
