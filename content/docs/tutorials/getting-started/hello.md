@@ -27,7 +27,15 @@ Replace `src/main.rs` with this program:
 
 {{<example path="tellus/examples/tutorials/getting_started/01_hello.rs"/>}}
 
-Run it with `cargo run --quiet` and it prints `Hello, Tellus!`.
+## Run it
+
+```sh
+cargo run --quiet
+```
+
+```txt
+Hello, Tellus!
+```
 
 ## What happens here
 

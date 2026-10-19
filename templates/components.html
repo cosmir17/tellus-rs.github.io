@@ -1,7 +1,18 @@
-{% component code(path: string, lang: string, title: string, link: string = "", id: string = "", axioms: string = "") %}
+{% component code(path: string, lang: string, title: string, link: string = "", id: string = "", axioms: string = "", anchor: string = "") %}
+{%- set source = load_data(path=path, format="plain") | regex_replace(pattern=`^(//!.*\n)+\n*`, rep="") -%}
+{%- if anchor -%}
+{%- set source = (source | split(pat="// ANCHOR: " ~ anchor ~ "\n"))[1] -%}
+{%- set source = (source | split(pat="// ANCHOR_END: " ~ anchor))[0] -%}
+{%- set first_line = (source | split(pat="\n"))[0] -%}
+{%- set indent = (first_line | length) - (first_line | trim_start | length) -%}
+{%- if indent > 0 -%}
+{%- set source = source | regex_replace(pattern="(?m)^ {" ~ indent ~ "}", rep="") -%}
+{%- endif -%}
+{%- endif -%}
+{%- set source = source | regex_replace(pattern=`(?m)^[ \t]*// ANCHOR(_END)?: .*\n`, rep="") -%}
 <div class="code"{% if id %} id="{{ id }}" data-show="" data-axioms="{{ axioms }}"{% endif %}>
   <div class="code-bar"><span>{{ title }}</span>{% if link %}<a href="{{ link }}">source</a>{% endif %}</div>
-  {{ ("```" ~ lang ~ "\n" ~ load_data(path=path, format="plain") ~ "```") | markdown | safe }}
+  {{ ("```" ~ lang ~ "\n" ~ (source | trim_end) ~ "\n```") | markdown | safe }}
 </div>
 {% endcomponent code %}
 
@@ -14,24 +25,7 @@
 {% endcomponent logo %}
 
 {% component example(path: string, anchor: string = "") %}
-{%- set source = load_data(path="tellus/" ~ path, format="plain") | regex_replace(pattern=`^(//!.*\n)+\n*`, rep="") -%}
-{%- if anchor -%}
-{%- set source = (source | split(pat="// ANCHOR: " ~ anchor ~ "\n"))[1] -%}
-{%- set source = (source | split(pat="// ANCHOR_END: " ~ anchor))[0] -%}
-{%- set first_line = (source | split(pat="\n"))[0] -%}
-{%- set indent = (first_line | length) - (first_line | trim_start | length) -%}
-{%- if indent > 0 -%}
-{%- set source = source | regex_replace(pattern="(?m)^ {" ~ indent ~ "}", rep="") -%}
-{%- endif -%}
-{%- endif -%}
-<div class="code">
-<div class="code-bar"><span>{{ path }}</span></div>
-
-```rust
-{{ source | trim_end }}
-```
-
-</div>
+{{<code path={"tellus/" ~ path} lang="rust" title={path} anchor={anchor}/>}}
 {% endcomponent example %}
 
 {% component articles(url: string, tag: string, timezone: string, tag_url: string) %}

@@ -31,11 +31,9 @@ For `Retire`, the group needs the device's answer in its own mailbox, as a `Grou
 `context.reply_to` creates such a `ReplyTo`: the closure turns the device's reply into a
 `Retired` message for the group. This is how actors ask each other without ever waiting.
 
-## The ordering guarantee
+## Run it
 
 {{<example path="tellus/examples/tutorials/getting_started/04_watch.rs" anchor="main"/>}}
-
-Run it:
 
 ```sh
 cargo run --quiet -p tellus --example getting_started_04_watch
@@ -51,8 +49,11 @@ left is gone
 
 The first line is the answer to the `ask` in `main`, which still reads a device through the group
 as in the previous step. After that, the two devices run concurrently, so `left` and `right` may
-appear in either order. But for each
-device, the handover always comes before "is gone". That is not luck. tellus guarantees that the
+appear in either order.
+
+## The ordering guarantee
+
+For each device, the handover always comes before "is gone". That is not luck. tellus guarantees that the
 terminated signal is ordered behind every message the terminated actor delivered to the watcher.
 
 So receiving `Terminated` proves that you have seen every message from that actor you will ever

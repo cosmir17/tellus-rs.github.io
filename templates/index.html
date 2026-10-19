@@ -31,14 +31,14 @@
     <div class="wrap">
       <div class="depth">Message handlers</div>
       <div class="split rev">
-      {{<code path="snippets/dispatcher.rs" lang="rust" title="a dispatcher" id="axiom-code" axioms="create:8 send:9 next:11"/>}}
+      {{<code path="tellus/tellus/examples/tutorials/getting_started/03_group.rs" anchor="record" lang="rust" title="a group of devices" id="axiom-code" axioms="create:7 send:8 next:9"/>}}
       <div class="prose">
         <h2>A message handler is a plain function.</h2>
         <p>Carl Hewitt defined an actor by what it may do in response to a message. A tellus <code>receive</code> does exactly that and nothing more. It runs to completion, so an actor is never halfway through a message with its state in limbo.</p>
         <div class="axioms" role="group" aria-label="Hewitt's axioms, highlighted in the code">
-          <button class="axiom" type="button" data-ax="create" aria-pressed="false"><span class="verb">create</span><span class="hewitt">a finite number of new actors</span><code>context.spawn(Worker)</code></button>
-          <button class="axiom" type="button" data-ax="send" aria-pressed="false"><span class="verb">send</span><span class="hewitt">a finite number of messages</span><code>worker.tell(Work(job))</code></button>
-          <button class="axiom" type="button" data-ax="next" aria-pressed="false"><span class="verb">designate</span><span class="hewitt">the behavior for the next message</span><code>Ok(Control::Continue(count + 1))</code></button>
+          <button class="axiom" type="button" data-ax="create" aria-pressed="false"><span class="verb">create</span><span class="hewitt">a finite number of new actors</span><code>context.spawn(Device)</code></button>
+          <button class="axiom" type="button" data-ax="send" aria-pressed="false"><span class="verb">send</span><span class="hewitt">a finite number of messages</span><code>device.tell(…)</code></button>
+          <button class="axiom" type="button" data-ax="next" aria-pressed="false"><span class="verb">designate</span><span class="hewitt">the behavior for the next message</span><code>Ok(Control::Continue(devices))</code></button>
         </div>
         <p>When an actor needs to wait for something, the result arrives as another message, so actor code never awaits. Even event sourcing works this way: the handler returns the events as data, and tellus does the I/O.</p>
         <a class="more" href="{{ get_url(path="@/docs/explanation/synchronous-handlers.md") }}">Why tellus handlers are synchronous →</a>
@@ -136,7 +136,7 @@
           <p>Implement <code>EventSourced</code> instead of <code>Actor</code>. Your handler validates a command against the state and returns an <code>Effect</code> naming the events it causes. tellus appends them to the store, and only then folds them into the state. After a crash, replay rebuilds exactly the same state, optionally shortcut by a snapshot.</p>
           <p>Conditional appends fence concurrent incarnations, manifests version your event schemas, and a contract test suite checks any store backend. PostgreSQL ships today; an in-memory store and <code>TestContext</code> let you test without a database.</p>
         </div>
-        {{<code path="snippets/event_sourced.rs" lang="rust" title="an event-sourced counter"/>}}
+        {{<code path="tellus/tellus/examples/tutorials/event_sourced/02_supervision.rs" anchor="handle-apply" lang="rust" title="an event-sourced device"/>}}
       </div>
       <ol class="flow">
         <li><b>handle</b><span>Validates the command against the current state and returns an <code>Effect</code>.</span></li>

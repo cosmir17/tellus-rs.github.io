@@ -8,4 +8,5 @@ sort_by       = "weight"
 aliases       = [ "/guide/how-to/" ]
 +++
 
-These pages are being written.
+Short recipes for concrete problems. Each one assumes you know the basics from the
+[getting started tutorial](@/docs/tutorials/getting-started/_index.md).
