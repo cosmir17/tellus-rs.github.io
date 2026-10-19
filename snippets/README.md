@@ -1,7 +1,7 @@
 # Landing page snippets
 
-The code shown on the landing page. Each file must eventually come from code CI compiles, so it
-cannot drift from the API:
+Landing page code which is not in tellus yet. Each snippet except `install.sh` must eventually come
+from code CI compiles, so it cannot drift from the API:
 
 | Snippet                                     | Target source                                                        |
 |---------------------------------------------|----------------------------------------------------------------------|

@@ -11,5 +11,6 @@ status = "coming-soon"
 +++
 
 This tutorial comes together with the `cluster` feature, which is not released yet. Until then,
-the [getting started tutorial](@/docs/tutorials/getting-started/_index.md) covers everything a
-single node does.
+the [getting started](@/docs/tutorials/getting-started/_index.md) and
+[event-sourced actors](@/docs/tutorials/event-sourced-actors/_index.md) tutorials cover a single
+node.

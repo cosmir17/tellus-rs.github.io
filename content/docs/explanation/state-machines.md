@@ -43,9 +43,10 @@ tellus calls `init` again, on the same actor value. Whatever the actor value car
 configuration or a connection pool, survives the restart. Whatever is in the state is rebuilt
 from scratch.
 
-The separation also makes the state's type say which data belongs to which state. A calibrated
-device has an offset, and an uncalibrated one has none. With fields on `&mut self`, the offset
-would be an `Option` next to a flag, and nothing would keep the two consistent.
+The state's type also says which data belongs to which state. A calibrated device has an offset,
+and an uncalibrated one has none. Because `receive` owns the state, a transition can move data out
+of the old variant into the new one. It needs no `mem::replace` and no placeholder value, as a
+transition through a `&mut` reference would.
 
 ## Changing behavior
 

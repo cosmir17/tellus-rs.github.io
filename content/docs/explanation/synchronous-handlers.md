@@ -10,16 +10,10 @@ page explains why tellus is designed this way and what it means for your code.
 
 ## What an actor does
 
-Carl Hewitt defined an actor by what it may do in response to a message. It may send a finite
-number of messages to other actors, create a finite number of new actors, and designate the
-behavior for the next message. A tellus `receive` does exactly that, here in the group of devices
-from the [getting started tutorial](@/docs/tutorials/getting-started/group.md):
-
-{{<example path="tellus/examples/tutorials/getting_started/03_group.rs" anchor="record"/>}}
-
-`context.spawn` creates an actor for a device the group has not seen before, `tell` sends it the
-reading, and the returned `Control::Continue(devices)` designates the state for the next message.
-Then `receive` returns, and the actor is ready for the next message.
+Carl Hewitt defined an actor by what it may do in response to a message: send messages, create
+actors and designate the behavior for the next message.
+[The actor model in Rust](@/docs/explanation/actor-model.md) shows how a tellus `receive` does
+exactly that.
 
 Hewitt's definition describes the reaction to one message as a whole. It has no step where an
 actor pauses in the middle and waits.
@@ -53,9 +47,10 @@ happens in tellus, not in your handler.
 
 ## Async and blocking work
 
-Some work does need to await: a database query, an HTTP request. Spawn a Tokio task for it and send
-the result back to the actor with `tell` or a `ReplyTo`. Blocking or CPU-heavy work goes into
-`spawn_blocking` the same way. The how-to guide
+Some work does need to await: a database query, an HTTP request. Pipe it to the actor with
+`context.pipe_to_self`: the future runs on its own Tokio task, and its output arrives as an
+ordinary message. The `JoinHandle` of `spawn_blocking` is a future too, so blocking or CPU-heavy
+work goes the same way. The how-to guide
 [Call async code from an actor](@/docs/how-to/call-async-code.md) shows the pattern.
 
 ## The costs

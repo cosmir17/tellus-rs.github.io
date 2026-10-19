@@ -4,9 +4,9 @@ description = "Keep a fast producer from overwhelming slow actors with work pull
 weight      = 4
 +++
 
-`tell` never blocks. If a producer sends faster than an actor can handle, the mailbox grows: by
-default without limit, with a bounded mailbox until it is full, and then further messages are
-dropped. Neither slows the producer down. For backpressure, let the consumers decide when they get
+`tell` never blocks. If a producer sends faster than an actor can handle, the mailbox grows. By
+default it grows without limit. A bounded mailbox grows until it is full, and then further messages
+are dropped. Neither slows the producer down. For backpressure, let the consumers decide when they get
 work: with work pulling, a worker asks for the next job when it is ready for it.
 
 The examples on this page come from a manager which owns a queue of documents and three workers
@@ -17,7 +17,11 @@ which count their words.
 {{<example path="tellus/examples/work_pulling.rs" anchor="request"/>}}
 
 A worker sends a `RequestJob` to the manager. The request carries a `ReplyTo` for the answer,
-which is `Next`, the worker's own message type. The worker requests a job when it starts:
+which is `Next`, the worker's own message type. The worker requests its first job in `init`:
+
+{{<example path="tellus/examples/work_pulling.rs" anchor="init"/>}}
+
+In `receive`, it handles the answer:
 
 {{<example path="tellus/examples/work_pulling.rs" anchor="work"/>}}
 
@@ -32,7 +36,7 @@ A `ReplyTo` can reply only once, so one request can never get more than one job.
 in the manager, where it is visible and can be bounded, instead of being spread over the workers'
 mailboxes.
 
-## Bound the mailboxes
+## Size the mailboxes by the protocol
 
 {{<example path="tellus/examples/work_pulling.rs" anchor="spawn"/>}}
 
@@ -48,9 +52,10 @@ are workers. When the protocol bounds the number of messages in flight like this
 documents and enforces that bound.
 
 The capacity must not be smaller than that bound. A dropped request takes its `ReplyTo` with it,
-and nothing ever answers the worker. With a capacity of one for the manager, the remaining workers
-still process all documents. But the workers whose requests were dropped never stop, so the
-manager waits for them forever. The dead letters in the log, at warn level, tell why.
+and nothing ever answers the worker. With a capacity of one for the manager, one or two of the
+three first requests are dropped. The workers whose requests got through still process all
+documents. But the workers whose requests were dropped never stop, so the manager waits for them
+forever. Run it with `RUST_LOG=warn`, and the dead letters in the log tell why.
 
 ## Bound every mailbox
 

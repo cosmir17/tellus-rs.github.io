@@ -10,6 +10,8 @@ retire before it answers. In this step a short-lived query actor does the asking
 
 The handover from the previous step has served its purpose, so devices now simply stop on
 `Retire`. The group's `Read` gives way to `Average`. Devices keep their `Read`: the query uses it.
+The group also no longer stops when its last device is gone, and `main` now ends with
+`system.stop()`.
 
 ## One query actor per request
 
@@ -49,7 +51,7 @@ cargo run --quiet -p tellus --example getting_started_05_query
 Average temperature: 20.95
 ```
 
-The device `right` retires right before the request, so the average covers `left` and `middle`
+The device `right` retires just before the request, so the average covers `left` and `middle`
 only.
 
 ## What you learned

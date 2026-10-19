@@ -20,13 +20,13 @@ cargo add config --no-default-features --features toml
 
 The keys are the fields of `ActorConfig`:
 
-- `mailbox_capacity` is `"unbounded"` (the default) or `{ bounded = n }`.
+- `mailbox_capacity` is `"unbounded"` (the default) or `{ bounded = n }` with `n` of at least 1.
 - `supervision_strategy` is `"stop"` (the default) or a `restart` table.
-- `max_restarts` is the only required key of `restart`. The others default to the values shown:
-  the backoff grows from 250 ms to at most 4 s, and the restart count resets once the actor has
-  run for 30 s without failing.
+- `max_restarts` is the only required key of `restart`. The others default to the values shown.
+  The backoff grows from 250 ms to at most 4 s. The restart count resets once the actor has run
+  for 30 s without failing. A `backoff` table needs both `min` and `max`.
 
-Durations use the [humantime](https://docs.rs/humantime) format, so `"250ms"`, `"4s"` or `"1m"`.
+Durations use the [humantime](https://docs.rs/humantime) format, for example `"250ms"`, `"4s"` or `"1m"`.
 
 ## Load it
 
@@ -46,7 +46,7 @@ above its maximum is an error, too:
 
 {{<example path="tellus/examples/how_to/configure_supervision.rs" anchor="error"/>}}
 
-The error names the offending key. In your application, return it from `main` instead of printing
+The error names the table with the offending key. In your application, return it from `main` instead of printing
 it, so a misconfigured service does not start.
 
 ## Run it

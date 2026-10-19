@@ -22,7 +22,7 @@ the two cases are handled the same way. The actor's supervision strategy decides
 
 `Stop`, the default, terminates the actor. Its watchers receive a terminated signal and decide
 what to do. The group of the getting started tutorial, for example, forgets a device when it
-terminates.
+terminates, from the [watching step](@/docs/tutorials/getting-started/watch.md) on.
 
 `Restart` keeps the actor alive with a new state:
 
@@ -43,9 +43,9 @@ watchers learn about it. The count resets once the actor has run for `reset_afte
 failing.
 
 The backoff delay doubles with every consecutive restart, from the backoff's minimum up to its
-maximum. A failing dependency, for example a database which is down, is then retried less and
-less often instead of in a tight loop. A failing `init` counts like a failing `receive`, also the
-very first one at spawn.
+maximum. By default the backoff grows from 250 ms to 4 s, and `reset_after` is 30 s. A failing dependency, for example a database which is down, is then retried less and
+less often instead of in a tight loop. A failing `init` counts like a failing `receive`, including
+the very first one at spawn.
 
 ## Stopping
 
@@ -58,9 +58,11 @@ parent's role. A stop never interrupts `receive`: the message being handled is f
 Termination releases the actor's resources in a fixed order:
 
 1. The state is dropped, so its destructors run.
-2. The children stop, recursively, and the actor waits until all of them have terminated.
-3. The actor value is dropped.
-4. The watchers receive the terminated signal.
+2. The mailbox is closed, and the queued messages are dropped. An `ask` among them fails with
+   `AskError::NoReply`.
+3. The children stop, recursively, and the actor waits until all of them have terminated.
+4. The actor value is dropped.
+5. The watchers receive the terminated signal.
 
 The order matters for what a terminated signal proves. When the signal arrives, the actor's state,
 its actor value and all its descendants are gone, with their destructors run. A resource that must
