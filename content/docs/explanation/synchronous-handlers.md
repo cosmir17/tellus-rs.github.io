@@ -1,7 +1,7 @@
 +++
 title       = "Synchronous message handlers"
 description = "Why receive is a plain function, and what that means for your code."
-weight      = 1
+weight      = 2
 +++
 
 In tellus, `receive` is a plain function, not an `async fn`. An actor handles a message from start
@@ -12,13 +12,14 @@ page explains why tellus is designed this way and what it means for your code.
 
 Carl Hewitt defined an actor by what it may do in response to a message. It may send a finite
 number of messages to other actors, create a finite number of new actors, and designate the
-behavior for the next message. A tellus `receive` does exactly that:
+behavior for the next message. A tellus `receive` does exactly that, here in the group of devices
+from the [getting started tutorial](@/docs/tutorials/getting-started/group.md):
 
-{{<code path="snippets/dispatcher.rs" lang="rust" title="a dispatcher"/>}}
+{{<example path="tellus/examples/tutorials/getting_started/03_group.rs" anchor="record"/>}}
 
-`context.spawn` creates an actor, `tell` sends a message, and the returned
-`Control::Continue(count + 1)` designates the state for the next message. Then `receive` returns,
-and the actor is ready for the next message.
+`context.spawn` creates an actor for a device the group has not seen before, `tell` sends it the
+reading, and the returned `Control::Continue(devices)` designates the state for the next message.
+Then `receive` returns, and the actor is ready for the next message.
 
 Hewitt's definition describes the reaction to one message as a whole. It has no step where an
 actor pauses in the middle and waits.

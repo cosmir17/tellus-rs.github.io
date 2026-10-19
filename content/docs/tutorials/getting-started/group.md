@@ -25,7 +25,9 @@ device the group replies `None` itself.
 
 {{<example path="tellus/examples/tutorials/getting_started/03_group.rs" anchor="main"/>}}
 
-Run it:
+## Run it
+
+From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --example getting_started_03_group

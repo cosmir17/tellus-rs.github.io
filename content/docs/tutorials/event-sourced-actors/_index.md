@@ -5,16 +5,10 @@ weight        = 2
 template      = "docs.html"
 page_template = "docs-page.html"
 sort_by       = "weight"
-
-[extra]
-status = "coming-soon"
 +++
 
-This tutorial is being written. Until then, the event-sourced examples of tellus show the
-`persistence` feature in action:
-[`event_sourced_counter`](https://github.com/tellus-rs/tellus/blob/tellus-v0.3.4/tellus-persistence-postgres/examples/event_sourced_counter.rs)
-and
-[`event_sourced_supervision`](https://github.com/tellus-rs/tellus/blob/tellus-v0.3.4/tellus-persistence-postgres/examples/event_sourced_supervision.rs),
-both against PostgreSQL. The post
-[tellus 0.2: event sourcing for actors](https://heikoseeberger.de/2026-08-31-tellus-persistence/)
-explains the design.
+The devices of the [getting started tutorial](@/docs/tutorials/getting-started/_index.md) keep their
+last reading in memory, so it is gone after a restart. In this tutorial they persist what happens
+to them as events and recover their state from those events: across a restart, across a new actor
+system and finally across processes, with PostgreSQL. You need the `persistence-in-memory` feature
+for the first three steps, and Docker for the last one.

@@ -1,7 +1,7 @@
 +++
 title       = "The death watch ordering guarantee"
 description = "Why receiving Terminated proves that you have seen every message of that actor."
-weight      = 2
+weight      = 4
 +++
 
 An actor can watch another actor and gets a signal once that actor has terminated. tellus adds a
