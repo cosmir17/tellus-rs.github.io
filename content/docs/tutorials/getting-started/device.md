@@ -14,7 +14,7 @@ A device understands two messages:
 {{<example path="tellus/examples/tutorials/getting_started/02_device.rs" anchor="message"/>}}
 
 `Record` carries a reading. `Read` asks for the last reading and carries a `ReplyTo`, the
-destination for the answer. A `ReplyTo` is used exactly once: calling `reply` consumes it.
+destination for the answer. A `ReplyTo` can be used at most once: calling `reply` consumes it.
 
 ## The actor
 
@@ -28,8 +28,8 @@ There is no `&mut self` and no field to update. The state lives in the return va
 read every transition in one place, the `match`.
 
 The `let ... else` at the top deals with `Incoming`. Besides messages an actor can receive signals
-about other actors terminating. The device does not watch any actor yet, so it never gets one; you
-will meet signals in step 4.
+about other actors terminating. The device watches no actor, so it never gets one; you will meet
+signals in [Watching devices](@/docs/tutorials/getting-started/watch.md).
 
 ## Talking to the device
 
@@ -42,15 +42,18 @@ reports whether it arrived. That makes it fast, and it is how actors talk to eac
 sends it and waits for the reply, at most for the given duration. Passing `DeviceMessage::Read`
 works because the variant is a function from `ReplyTo` to a message.
 
-The mailbox delivers messages in the order they were sent. So the `Read` is handled after both
+Messages from one sender arrive in the order they were sent. So the `Read` is handled after both
 readings, and the answer is always the second one. At the end, `system.stop()` stops the root
 actor and `terminated` waits for it.
 
 ## Run it
 
-From a clone of the tellus repository:
+From this step on, every step is an example in the tellus repository, and the pages show its
+relevant parts. Clone the repository once and run the examples from there:
 
 ```sh
+git clone https://github.com/tellus-rs/tellus
+cd tellus
 cargo run --quiet -p tellus --example getting_started_02_device
 ```
 

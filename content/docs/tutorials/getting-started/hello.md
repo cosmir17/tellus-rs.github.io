@@ -7,7 +7,8 @@ aliases     = [ "/guide/tutorial/hello/" ]
 
 In this tutorial you build a small temperature monitor: devices record readings, a group manages
 its devices, and you can ask the group for the average temperature. Each step is a complete
-program that compiles and runs. You need nothing but tellus and Tokio.
+program that compiles and runs. Besides tellus and Tokio, the programs use anyhow for errors, and
+the last two steps also use thiserror and tracing-subscriber.
 
 ## Set up a project
 

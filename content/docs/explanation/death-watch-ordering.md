@@ -1,10 +1,10 @@
 +++
 title       = "The death watch ordering guarantee"
-description = "Why receiving Terminated proves that you have seen every message of that actor."
+description = "Why receiving Terminated proves that you have seen every message from that actor you will ever see."
 weight      = 4
 +++
 
-An actor can watch another actor and gets a signal once that actor has terminated. tellus adds a
+An actor can watch another actor and then gets a signal once that actor has terminated. tellus adds a
 guarantee to that signal: it arrives behind every message the terminated actor delivered to the
 watcher. This page explains what the guarantee says, why it holds and what you can build on it.
 
@@ -30,36 +30,38 @@ after it.
 
 Messages from one sender arrive in the order they were sent, because a mailbox is a single FIFO
 queue. A watch hands the watched actor a way to send into exactly that queue. When the watched
-actor terminates, after its destructors have run, it sends the terminated signal through it, into
-the same queue as all the messages it delivered to the watcher before. The signal therefore
-queues up behind them. Nothing more is needed than the shared queue.
+actor terminates, after its destructors have run, it sends the terminated signal this way. The
+signal enters the same queue as all the messages it delivered to the watcher before, so it queues
+up behind them.
 
 The guarantee covers delivered messages only. `tell` delivers at most once: a message dropped as
 a dead letter, for example because the watcher's bounded mailbox was full, never entered the
 queue. That is why the guarantee says "seen every message it will ever see" and not "received
-every message it sent".
+every message it sent". Messages which a task spawned by the actor sends on its behalf are not
+covered either, because they do not come from the actor itself.
 
 ## What you can build on it
 
 **Waiting for answers without timeouts.** An actor that asks several others and waits for their
 answers can watch each of them. When `Terminated` arrives for one, its answer cannot come
 anymore, so the actor stops waiting for it. The query actor in the
-[tutorial](@/docs/tutorials/getting-started/query.md) works this way. It never hangs, and the
-only timeout is the one on `ask` at the boundary to the outside world.
+[tutorial](@/docs/tutorials/getting-started/query.md) works this way. It cannot wait forever for a
+device that has terminated, and the only timeout is the one on `ask` at the boundary to the
+outside world.
 
 **Handovers.** An actor can send a final message before it stops, and its watcher knows that this
 message comes before `Terminated`. In the [tutorial](@/docs/tutorials/getting-started/watch.md),
 retiring devices hand over their last reading this way.
 
 **Registries.** A parent that keeps its children in a map can watch them and remove an entry on
-`Terminated`. Since nothing from that child can arrive afterwards, the map never refers to an
-actor that might still send something.
+`Terminated`. Since nothing from that child can arrive afterwards, no message ever comes from a
+child that is no longer in the map.
 
 ## Unwatching
 
-`context.unwatch(&actor)` reverts a watch, and its contract is absolute: after it returns, the
-watcher never receives a terminated signal for that actor, even if the signal is already waiting
-in its mailbox. tellus enforces this on the watcher's side and drops such a signal before
+`context.unwatch(&actor)` reverts a watch. Its contract is absolute: after it returns, the watcher
+never receives a terminated signal for that actor. This holds even if the signal is already
+waiting in its mailbox. tellus enforces this on the watcher's side and drops such a signal before
 `receive` sees it. Unwatch as soon as you no longer care, for example once an actor has answered.
 
 ## Across nodes

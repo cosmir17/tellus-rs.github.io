@@ -11,7 +11,8 @@ such a reading makes the device fail, and tellus restarts it.
 
 {{<example path="tellus/examples/tutorials/getting_started/06_supervision.rs" anchor="device"/>}}
 
-The device's `Error` type is now `InvalidReading` instead of `Infallible`. For a reading that is
+The device's `Error` type is now `InvalidReading` instead of `Infallible`, a unit struct deriving
+`thiserror::Error`. For a reading that is
 not a number, `receive` returns `Err(InvalidReading)`. You can also use `?` to escalate a failure
 the same way. A panic in `receive` counts as a failure, too.
 
@@ -26,9 +27,13 @@ again for a fresh state. The device keeps its `ActorRef` and its mailbox, so mes
 already queued are still handled after the restart. Only the state is lost: a restarted device has
 no last reading.
 
-Restarts back off exponentially, starting at 250 ms by default. A device failing more than
-`MAX_RESTARTS` times in a row stops for good. Since the group watches its devices, it gets
-`Terminated` and prunes the device, just as for a retired one.
+Restarts back off exponentially, starting at 250 ms by default. The number of restarts is limited:
+
+{{<example path="tellus/examples/tutorials/getting_started/06_supervision.rs" anchor="max-restarts"/>}}
+
+A device which fails more than three times stops for good. The count starts over once a device has
+run for 30 seconds without failing, the default of `RestartPolicy`. Since the group watches its
+devices, it gets `Terminated` and prunes the device, just as for a retired one.
 
 ## Run it
 
@@ -45,7 +50,7 @@ Average temperature: 20.40
 ```
 
 `left` failed and restarted, so it lost its 21.5 and has no reading. `broken` failed four times and
-stopped. `right` retired. Only `middle` is left with a reading.
+stopped. `right` retired. Only `middle` still has a reading.
 
 On stderr tellus logs every failure and restart, as JSON because the example configures the
 tracing subscriber that way. The answer takes about two seconds, because the query waits until

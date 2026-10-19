@@ -12,7 +12,7 @@ the latest snapshot and replays only the events after it.
 
 {{<example path="tellus/examples/tutorials/event_sourced/03_snapshots.rs" anchor="readings"/>}}
 
-The state now also counts the readings, so it can decide when a snapshot is due. It doubles as the
+The state now also counts the readings, so `snapshot` can decide when one is due. It doubles as the
 snapshot type, so it is `Versioned` like an event.
 
 {{<example path="tellus/examples/tutorials/event_sourced/03_snapshots.rs" anchor="apply"/>}}
@@ -24,18 +24,20 @@ device offers one after every third reading.
 
 On recovery, if there is a snapshot, `init_from_snapshot` turns it into the state, and only the
 events after the snapshot are replayed. Without a snapshot, `init` is the starting point, as
-before. Because of this, `init` must stay pure: it is skipped as soon as a snapshot exists. Work
+before. `init` must stay pure, because it is skipped as soon as a snapshot exists. Work
 which touches the world at start, like spawning children, belongs in `recovered`, which runs after
 every recovery.
 
-A snapshot is never the source of truth. The events are. If a snapshot cannot be saved or later no
-longer decoded, recovery simply replays more events.
+A snapshot is never the source of truth; the events are. If a snapshot cannot be saved, or can no
+longer be decoded later, recovery replays more events.
 
 ## Run it
 
 {{<example path="tellus/examples/tutorials/event_sourced/03_snapshots.rs" anchor="main"/>}}
 
 The snapshot store is configured with `with_snapshot_store`. The in-memory store serves both roles.
+
+From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --features persistence-in-memory --example event_sourced_03_snapshots
@@ -51,4 +53,4 @@ The second system starts from the snapshot after six readings and replays only t
 ## What you learned
 
 Snapshots shorten recovery. `snapshot` decides when one is due, `init_from_snapshot` starts from it,
-and the events remain the source of truth. Last, the device moves to a real database.
+and the events remain the source of truth. Finally, the device moves to a real database.

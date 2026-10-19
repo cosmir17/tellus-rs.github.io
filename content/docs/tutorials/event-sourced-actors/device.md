@@ -38,13 +38,13 @@ split in two:
 - `apply` changes the state. It folds one event into the state and is the only state transition.
 
 tellus appends the events to the store, and only then applies them. On recovery, it replays the
-stored events through `apply`, the same way, so the recovered state is exactly the state the
-device had.
+stored events through the same `apply`, so the recovered state is exactly the state the device
+had.
 
 `persistence_id` names the device's stream of events. Every incarnation of this device, today or
-next year, reads and writes the same stream. `init` is the state before any event, and
-`init_from_snapshot` is unreachable here, because `Nothing` as snapshot type means no snapshots;
-step 3 adds them.
+next year, reads and writes the same stream. `init` is the state before any event.
+`init_from_snapshot` is unreachable here, because `Nothing` as the snapshot type means no
+snapshots. Step 3 adds them.
 
 ## Run it
 
@@ -57,6 +57,8 @@ the two events and answers with the last one.
 
 Notice the `ask` before the first `stop`. `stop` takes effect between two commands, so without
 waiting for an answer, the queued readings might never be handled.
+
+From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --features persistence-in-memory --example event_sourced_01_device

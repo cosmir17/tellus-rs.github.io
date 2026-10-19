@@ -5,8 +5,9 @@ weight      = 2
 +++
 
 `receive` is a plain function, so you can call it in a test like any other function: pass a
-message and a state, and check what it returns. The only argument you cannot build by hand is the
-`ActorContext`. The `test-util` feature provides one with `TestContext`:
+message and a state, and check what it returns. The only arguments you cannot build by hand are
+the `ActorContext` and any `ReplyTo` in a message. The `test-util` feature provides both through
+`TestContext`:
 
 ```sh
 cargo add tellus --dev --features test-util
@@ -19,19 +20,18 @@ The examples on this page test the device and the group of the
 
 {{<example path="tellus/tests/how_to_unit_test.rs" anchor="record"/>}}
 
-`test_context.context()` is the `ActorContext` for the call. `receive` returns a `Result` with the
-`Control` and the next state. `assert_matches!` (imported with `use std::assert_matches;`) checks
+`test_context.context()` is the `ActorContext` for the call. No actor system runs, and nothing
+needs to be awaited. `receive` returns a `Result` with the `Control` and the next state. `assert_matches!` (imported with `use std::assert_matches;`) checks
 all of it in one assertion and prints the actual value when the check fails. Its bindings do not
 leave the macro, though. When a test goes on with the state, `let ... else` takes the result apart
-instead, as in [Test children and death watch](#test-children-and-death-watch). No actor system
-runs, and nothing needs to be awaited.
+instead, as in [Test children and death watch](#test-children-and-death-watch).
 
 ## Check what an actor sends
 
 {{<example path="tellus/tests/how_to_unit_test.rs" anchor="reply"/>}}
 
 A reply goes to whoever asked. In a test, a second `TestContext` stands in for the asker: its
-`reply_to` creates the `ReplyTo` for the message. After the call, `take_incoming` returns
+context's `reply_to` creates the `ReplyTo` for the message. After the call, `take_incoming` returns
 everything that arrived at the asker, in order. Messages an actor sends to itself through
 `context.self_ref()` arrive at its own `TestContext` the same way.
 
@@ -66,8 +66,8 @@ error.
 
 {{<example path="tellus/tests/how_to_unit_test_event_sourced.rs" anchor="reply"/>}}
 
-A continuation attached with `then` runs only during `settle`, so the asker receives the reply
-after it.
+A continuation attached with `then` runs only during `settle`, so the asker has the reply only
+after `settle`.
 
 {{<example path="tellus/tests/how_to_unit_test_event_sourced.rs" anchor="replay"/>}}
 
@@ -95,4 +95,14 @@ From a clone of the tellus repository:
 
 ```sh
 cargo test --quiet -p tellus --features test-util,persistence --test how_to_unit_test --test how_to_unit_test_event_sourced
+```
+
+```txt
+running 3 tests
+...
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+running 4 tests
+....
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```

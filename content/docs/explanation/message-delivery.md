@@ -19,12 +19,12 @@ fail to deliver a message for two reasons:
 In both cases tellus drops the message and logs it at warn level as a dead letter, with the actor
 ID and the message type. A message which was delivered can still go unprocessed: when the actor
 stops before it gets to the message, the message is dropped with the rest of the mailbox. When an
-actor fails while handling a message, that message is consumed and not delivered again, also not
+actor fails while handling a message, that message is consumed and not delivered again, not even
 to the restarted actor.
 
 At least once would need acknowledgements and redelivery, and with them deduplication in every
-receiver. tellus leaves that to the protocols which need it, built from messages. Request and
-response is such a protocol, built into tellus as `ask`.
+receiver. tellus leaves that to the protocols which need it, built from messages. `ask` provides
+the acknowledgement part: the caller learns whether a reply came. Redelivery is up to the caller.
 
 ## In order per sender
 
@@ -38,13 +38,14 @@ at the same time cannot know whose message the device handles first.
 `ask` sends a message which carries a `ReplyTo` and waits for the reply, at most for a given
 timeout. It resolves exactly once: with the reply, or with an error. The error says what went
 wrong, for example that the mailbox was full, that the actor has terminated, that the timeout
-elapsed, or that the `ReplyTo` was dropped without a reply. The reply itself is an ordinary
-message, so it is delivered at most once, too. A reply after the timeout is a dead letter.
+elapsed, or that the `ReplyTo` was dropped without a reply. The reply is delivered at most
+once, too: a reply after the timeout is a dead letter.
 
-## Signals are never dropped
+## Terminated signals bypass the capacity
 
 A terminated signal, which tells a watcher that a watched actor has terminated, bypasses the
-capacity of a bounded mailbox. It is never dropped while the watcher is alive. It also arrives
+capacity of a bounded mailbox. A full mailbox never drops it; only `unwatch` or the watcher's own
+termination does. It also arrives
 behind every message the terminated actor delivered to the watcher, which is the
 [death watch ordering guarantee](@/docs/explanation/death-watch-ordering.md).
 

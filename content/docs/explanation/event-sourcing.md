@@ -25,10 +25,10 @@ fails, the events are not applied, and the actor fails into its supervision stra
 memory therefore never contains anything the store does not have. All events of one effect are
 appended atomically: after a crash the store contains all of them or none.
 
-Writes are strict. A command is settled, with its events stored and applied, before the actor
-takes the next message from its mailbox. Ordering per sender carries over from plain actors.
+Writes are strict. A command is settled, with its events stored and applied and its continuation
+run, before the actor takes the next message from its mailbox. Ordering per sender carries over from plain actors.
 
-## Effects happen at most once
+## Continuations run at most once
 
 A reply or a message to another actor must not happen before its events are stored, otherwise the
 world would learn about something which a crash could still undo. Such actions therefore go into a
@@ -37,7 +37,7 @@ applied.
 
 A crash between the append and the continuation loses the continuation. It is not run again on
 recovery, because recovery never runs effects. Outward-facing actions are therefore at most once,
-exactly like `tell`. Events are durable, and effects are not.
+exactly like `tell`, while the events are durable.
 
 ## Recovery
 
@@ -70,8 +70,9 @@ in favor of a full replay.
 A `PersistenceId` names an event stream. Normally exactly one actor writes to it, but a
 misconfiguration or a network partition can start a second incarnation. tellus protects the
 stream with optimistic concurrency: every append states the sequence number it expects to write
-at, and the store rejects it if another append got there first. The loser fails, recovers the
-winner's events by replay, and continues on top of them. The stream never loses events.
+at, and the store rejects it if another append got there first. The loser fails into its
+supervision strategy. Under `Restart`, it recovers the winner's events by replay and continues on
+top of them. The stream never loses events.
 
 This is not exclusive ownership. The recovered loser can win the next append, so two live
 incarnations can take turns writing to the stream. Each append is consistent with the events

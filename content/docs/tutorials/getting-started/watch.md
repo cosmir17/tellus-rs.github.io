@@ -48,12 +48,12 @@ left is gone
 ```
 
 The first line is the answer to the `ask` in `main`, which still reads a device through the group
-as in the previous step. After that, the two devices run concurrently, so `left` and `right` may
-appear in either order.
+as in the previous step. After that, the two devices run concurrently, so the lines of `left` and
+`right` may interleave in any order.
 
 ## The ordering guarantee
 
-For each device, the handover always comes before "is gone". That is not luck. tellus guarantees that the
+For each device, the handover always comes before "is gone". tellus guarantees this: the
 terminated signal is ordered behind every message the terminated actor delivered to the watcher.
 
 So receiving `Terminated` proves that you have seen every message from that actor you will ever

@@ -6,8 +6,8 @@ weight      = 4
 
 The in-memory store forgets everything when the process ends. For real persistence, the
 [`tellus-persistence-postgres`](https://crates.io/crates/tellus-persistence-postgres) crate stores
-events and snapshots in PostgreSQL. The device stays exactly as in the previous step; only the store
-changes.
+events and snapshots in PostgreSQL. The device stays as in the previous step, apart from its persistence
+ID. The store and `main` change.
 
 ```sh
 cargo add tellus-persistence-postgres
@@ -26,7 +26,7 @@ recovers all earlier readings from the database, the count grows from run to run
 
 ## Run it
 
-From a clone of the tellus repository, start PostgreSQL with Docker:
+From a clone of the tellus repository, start PostgreSQL with Docker and run the example twice:
 
 ```sh
 docker compose up -d --wait postgres

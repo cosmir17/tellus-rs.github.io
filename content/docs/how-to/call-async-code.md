@@ -14,8 +14,8 @@ database.
 
 ## Pipe a future to the actor
 
-The messages contain the request, `Lookup`, and the message which carries the result back,
-`Found`:
+The message type has a variant for the request, `Lookup`, and one which carries the result back,
+`Found`. `Checksum` and `Computed` follow further below:
 
 {{<example path="tellus/examples/how_to/call_async_code.rs" anchor="message"/>}}
 
@@ -34,9 +34,9 @@ messages.
 
 ## Handle errors
 
-A failure is part of the output. `find_customer` returns a `Result`, and the `Found` message
-carries it as it is. The actor decides what to do with an error in `receive`, like with any other
-message: here it simply passes it on to whoever asked.
+If the async code can fail, the failure is part of the future's output: `find_customer` returns a
+`Result`, and the `Found` message carries it as it is. The actor decides what to do with an error
+in `receive`, as with any other message. Here it passes the error on to whoever asked.
 
 ## Run blocking work
 
@@ -45,16 +45,17 @@ future, so you pipe it the same way:
 
 {{<example path="tellus/examples/how_to/call_async_code.rs" anchor="checksum"/>}}
 
-The output is a `Result<u64, JoinError>`. It is an error if the blocking closure panicked.
+The output is a `Result<u64, JoinError>`. It is an error if, for example, the blocking closure panicked.
 
 ## What to keep in mind
 
-**Other messages come first.** The actor handles other messages while the future runs, and the
+**Other messages can come first.** The actor handles other messages while the future runs, and the
 result arrives whenever the future is ready. Write `receive` so that it does not depend on the
 result arriving before anything else.
 
 **Stopping does not cancel the future.** If the actor has terminated by the time the future is
-ready, the result is dropped and logged as a dead letter.
+ready, the result is dropped and logged as a dead letter. With a bounded mailbox, the result is
+also dropped and logged as a dead letter when the mailbox is full.
 
 **A restart does not cancel the future either.** A restarted actor keeps its mailbox, so the result
 of a future piped before the restart is received by the new state. If an actor must tell such
