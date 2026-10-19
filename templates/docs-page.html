@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page.title }}: tellus{% endblock title %}
-{% block description %}{{ page.description | default(value=config.description) }}{% endblock description %}
-
 {% block content %}
 {% set part = get_section(path=page.ancestors[-1]) %}
 <div class="wrap doc">

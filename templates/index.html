@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 
+{% block head %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "tellus",
+    "description": "An actor framework for Rust, built on Tokio: typed actors as state machines, supervision trees, an ordered death watch and event sourcing.",
+    "url": "https://tellus.rs/",
+    "codeRepository": "https://github.com/tellus-rs/tellus",
+    "programmingLanguage": "Rust",
+    "runtimePlatform": "Tokio",
+    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+    "author": { "@type": "Person", "name": "Heiko Seeberger", "url": "https://heikoseeberger.de" }
+  }
+  </script>
+{% endblock head %}
+
 {% block content %}
   <section class="hero">
     <div class="wrap">

@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}{{ section.title }}: tellus{% endblock title %}
-{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}
-
 {% block content %}
 <div class="wrap doc">
   {% include "docs-nav.html" %}
