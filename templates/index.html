@@ -18,10 +18,11 @@
 {% endblock head %}
 
 {% block content %}
+{% set tellus_manifest = load_data(path="tellus/tellus/Cargo.toml", format="toml") %}
   <section class="hero">
     <div class="wrap">
       <div>
-        <div class="eyebrow"><span class="pill">{{ config.extra.version }}</span> actor framework for Rust <span aria-hidden="true">·</span> built on Tokio <span aria-hidden="true">·</span> Apache 2.0</div>
+        <div class="eyebrow"><span class="pill">{{ tellus_manifest.package.version }}</span> actor framework for Rust <span aria-hidden="true">·</span> built on Tokio <span aria-hidden="true">·</span> Apache 2.0</div>
         <h1>Actors for Rust, on <span class="ground">solid ground.</span></h1>
         <p class="lede">tellus gives you typed actors as state machines, supervision trees and a death watch you can reason about. Add event sourcing when you need it, and soon a cluster, through the same API.</p>
         <div class="cta">
