@@ -11,6 +11,13 @@
   <link rel="stylesheet" href="{{ get_url(path='main.css', cachebust=true) }}">
   <link rel="stylesheet" href="{{ get_url(path='giallo.css') }}">
   <script>try { const t = localStorage.getItem('tellus-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  {% if config.mode == "build" %}
+  <script async src="{{ config.extra.plausible }}"></script>
+  <script>
+    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+    plausible.init()
+  </script>
+  {% endif %}
 </head>
 <body>
 <header class="top">
