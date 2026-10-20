@@ -1,0 +1,23 @@
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.top .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-family: var(--f-display); font-weight: 750; font-size: 1.35rem; letter-spacing: -0.02em; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.nav { display: flex; gap: 22px; margin-left: auto; align-items: center; font-size: var(--t-sm); }
+.nav a { color: var(--ink-2); text-decoration: none; }
+.nav a:hover { color: var(--ink); }
+.theme-btn {
+  font: inherit; font-size: var(--t-xs); font-family: var(--f-mono);
+  background: transparent; color: var(--ink-2); border: 1px solid var(--rule);
+  border-radius: 999px; padding: 4px 10px; cursor: pointer;
+}
+.theme-btn:hover { color: var(--ink); border-color: var(--ink-3); }
+@media (max-width: 760px) { .nav .opt { display: none; } }

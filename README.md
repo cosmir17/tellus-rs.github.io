@@ -40,6 +40,12 @@ just pin-tellus tellus-v0.4.0
 The few landing page snippets which are not in tellus yet live in `snippets/`; see
 [its README](snippets/README.md) for where each of them should eventually come from.
 
+## Styles
+
+The site-wide design lives in the Sass partials `sass/_fonts.scss`, `sass/_tokens.scss` (colors,
+font stacks, type scale), `sass/_base.scss` and `sass/_header.scss`. `sass/main.scss` imports them
+and styles the individual pages.
+
 ## llms.txt
 
 `static/llms.txt` lists every docs page for agents, following [llmstxt.org](https://llmstxt.org).
