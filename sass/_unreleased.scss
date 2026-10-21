@@ -1,0 +1,5 @@
+.soon { display: inline-block; vertical-align: middle; font-family: var(--f-mono); font-size: var(--t-xs); font-weight: 600; line-height: 1.4; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ochre); border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; }
+.soon-note { margin-top: 36px; color: var(--ink-2); font-size: var(--t-sm); }
+.soon-note + .features { margin-top: 12px; }
+.articles-fallback { color: var(--ink-2); border-top: 2px solid var(--ink); padding-top: 14px; }
+.doc-nav .soon { border: 0; padding: 0; font-size: 0.7rem; vertical-align: baseline; white-space: nowrap; }

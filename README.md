@@ -42,9 +42,11 @@ The few landing page snippets which are not in tellus yet live in `snippets/`; s
 
 ## Styles
 
-The site-wide design lives in the Sass partials `sass/_fonts.scss`, `sass/_tokens.scss` (colors,
-font stacks, type scale), `sass/_base.scss` and `sass/_header.scss`. `sass/main.scss` imports them
-and styles the individual pages.
+`sass/main.scss` only imports the Sass partials in `sass/`, in an order that matters for the
+cascade. Most partials hold the site-wide design: `_fonts`, `_tokens` (colors, font stacks, type
+scale), `_base`, `_header`, `_hero`, `_sections`, `_footer`, `_highlight`, `_docs`, `_articles` and
+`_copy`. The remaining ones style the landing page (`_borehole`, `_landing`, `_start`) and mark
+unreleased features (`_unreleased`).
 
 ## llms.txt
 

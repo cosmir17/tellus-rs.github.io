@@ -1,0 +1,32 @@
+.hero { padding-block: clamp(40px, 7vw, 88px) 0; overflow: hidden; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: end; }
+.eyebrow {
+  font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3); display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+}
+.eyebrow .pill { color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; letter-spacing: 0.04em; }
+.hero h1 {
+  font-size: var(--t-hero); line-height: 0.92; font-weight: 800; letter-spacing: -0.035em;
+  font-variation-settings: "wdth" 78, "opsz" 96; margin-top: 22px;
+}
+.hero h1 .ground { color: var(--accent); }
+.lede { font-size: clamp(1.08rem, 1rem + 0.35vw, 1.24rem); color: var(--ink-2); margin-top: 26px; max-width: 54ch; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; align-items: center; }
+.install {
+  display: inline-flex; align-items: center; gap: 12px; background: var(--code-bg); color: var(--code-fg);
+  font-family: var(--f-mono); font-size: 0.95rem; padding: 11px 12px 11px 16px; border-radius: 8px; max-width: 100%;
+}
+.install .prompt { color: var(--code-dim); user-select: none; }
+.install button {
+  font: inherit; font-size: var(--t-xs); background: transparent; color: var(--code-dim);
+  border: 1px solid #3a423c; border-radius: 6px; padding: 3px 9px; cursor: pointer;
+}
+.install button:hover { color: var(--code-fg); border-color: var(--code-dim); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700;
+  padding: 11px 18px; border-radius: 8px; font-size: 0.98rem;
+}
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-ghost { color: var(--ink); border: 1px solid var(--rule); }
+.btn-ghost:hover { border-color: var(--ink-3); }

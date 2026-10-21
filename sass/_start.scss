@@ -1,0 +1,5 @@
+.trail { display: grid; gap: 0; margin: 28px 0 0; padding: 0; counter-reset: ex; }
+.trail li { list-style: none; display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 4px 14px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.trail li::before { counter-increment: ex; content: counter(ex, decimal-leading-zero); font-family: var(--f-mono); color: var(--ink-3); font-size: var(--t-sm); grid-row: span 2; }
+.trail li b { font-family: var(--f-mono); font-size: 0.95rem; }
+.trail li span { color: var(--ink-2); font-size: var(--t-sm); grid-column: 2; }

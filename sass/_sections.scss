@@ -1,0 +1,16 @@
+section.stratum { padding-block: clamp(64px, 9vw, 120px); border-bottom: 1px solid var(--rule); }
+section.stratum.alt { background: var(--bg-2); }
+.depth {
+  font-family: var(--f-mono); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+}
+.depth::after { content: ""; flex: 1; height: 1px; background: var(--rule); max-width: 120px; }
+.depth b { color: var(--accent); font-weight: 600; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+.split.rev { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+@media (max-width: 900px) { .split, .split.rev { grid-template-columns: minmax(0, 1fr); } .split.rev > .code { order: 2; } }
+.prose { display: grid; gap: 18px; color: var(--ink-2); }
+.prose h2 { color: var(--ink); }
+.prose strong { color: var(--ink); }
+.more { font-weight: 700; text-decoration: none; display: inline-flex; gap: 6px; }
+.more:hover { text-decoration: underline; }
