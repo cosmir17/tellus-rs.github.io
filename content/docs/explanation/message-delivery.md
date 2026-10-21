@@ -49,11 +49,41 @@ termination does. It also arrives
 behind every message the terminated actor delivered to the watcher, which is the
 [death watch ordering guarantee](@/docs/explanation/death-watch-ordering.md).
 
+## Across nodes
+
+With the `cluster` feature, `tell` and `ask` work the same on a reference to an actor on another
+node. At most once and the order hold across nodes as well, with the additions below. Terminated
+signals keep their ordering guarantee only when they report a real termination, see
+[the death watch ordering guarantee across nodes](@/docs/explanation/death-watch-ordering.md#across-nodes).
+
+A message to another node is still delivered at most once. Besides a terminated actor and a full
+mailbox, the network adds its own reasons to drop it:
+
+- The node is unreachable or gone.
+- The queue of outgoing messages for that node is full.
+- The encoded message is larger than the maximum frame size.
+- The receiving node cannot decode it.
+
+tellus logs each of these as a dead letter, too.
+
+The order holds per sender and recipient. When a connection breaks, tellus reconnects and delivers
+the messages queued meanwhile, in order. It does not replay the messages that were already handed to
+the broken connection, so some of them may be lost. Across a reconnect, messages hence arrive in
+order, with gaps: never reordered, never duplicated, possibly missing.
+
+`ask` crosses nodes through the same API, and the `ReplyTo` travels inside the message. It still
+resolves exactly once, at the latest at its timeout, and the reply stays in order with the other
+messages the responder sends the asker. Noticing a `ReplyTo` that was dropped without a reply is
+only best effort across nodes, so such an ask may end with its timeout instead. Three errors exist
+only for remote requests: the message cannot be encoded, it is too large to send, or this node's
+endpoint has not been started. Encoding and size errors are not transient: retrying the unchanged
+request fails again.
+
 ## What this means for your code
 
-Design protocols for loss. When a message matters, let the receiver confirm it, typically with
-`ask`, and decide what to do when the confirmation does not come. When an actor must not lose its
-state with a failure or a restart of the process, make it
-[event-sourced](@/docs/explanation/event-sourcing.md). When a producer can outrun a consumer, use
-a protocol which lets the consumer pull its work, as described in
-[Apply backpressure](@/docs/how-to/apply-backpressure.md).
+Design protocols for loss, all the more across nodes. When a message matters, let the receiver
+confirm it, typically with `ask`, and decide what to do when the confirmation does not come. When an
+actor must not lose its state with a failure or a restart of the process, make it
+[event-sourced](@/docs/explanation/event-sourcing.md). When a producer can outrun a consumer, use a
+protocol which lets the consumer pull its work, as described in [Apply
+backpressure](@/docs/how-to/apply-backpressure.md).

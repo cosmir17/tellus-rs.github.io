@@ -55,5 +55,10 @@ message without waiting for anything. `terminated` resolves once the root actor 
 then the program ends.
 
 Notice that `receive` is a plain function, not an `async fn`. An actor reacts to one message at a
-time, from start to finish. In the next step you give an actor state that changes with every
-message.
+time, from start to finish.
+
+## What you learned
+
+An actor is a type that implements `Actor`: its message, state and error types, an `init` that
+creates the state and a `receive` that handles one message at a time. `ActorSystem::new` spawns it,
+and `tell` sends it a message. Next, you give an actor state that changes with every message.

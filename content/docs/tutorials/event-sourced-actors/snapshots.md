@@ -31,17 +31,21 @@ every recovery.
 A snapshot is never the source of truth; the events are. If a snapshot cannot be saved, or can no
 longer be decoded later, recovery replays more events.
 
-## Run it
+## Talking to the device
 
 {{<example path="tellus/examples/tutorials/event_sourced/03_snapshots.rs" anchor="main"/>}}
 
 The snapshot store is configured with `with_snapshot_store`. The in-memory store serves both roles.
+
+## Run it
 
 From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --features persistence-in-memory --example event_sourced_03_snapshots
 ```
+
+It prints:
 
 ```txt
 Stored events: 7, the snapshot covers the first 6

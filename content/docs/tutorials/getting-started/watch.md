@@ -31,13 +31,23 @@ For `Retire`, the group needs the device's answer in its own mailbox, as a `Grou
 `context.reply_to` creates such a `ReplyTo`: the closure turns the device's reply into a
 `Retired` message for the group. This is how actors ask each other without ever waiting.
 
-## Run it
+## Talking to the group
 
 {{<example path="tellus/examples/tutorials/getting_started/04_watch.rs" anchor="main"/>}}
+
+`main` records a reading for `left` and `right`, asks for the last reading of `left` as in the
+previous step, and then retires both devices. It waits for the group to terminate, which it does
+once its last device is gone.
+
+## Run it
+
+From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --example getting_started_04_watch
 ```
+
+It prints:
 
 ```txt
 Last reading of left: 21.5
@@ -47,9 +57,8 @@ left handed over its last reading 21.5
 left is gone
 ```
 
-The first line is the answer to the `ask` in `main`, which still reads a device through the group
-as in the previous step. After that, the two devices run concurrently, so the lines of `left` and
-`right` may interleave in any order.
+The first line is the answer to the `ask`. After that, the two devices run concurrently, so the
+lines of `left` and `right` may interleave in any order.
 
 ## The ordering guarantee
 
@@ -65,4 +74,4 @@ come.
 
 `context.watch` turns another actor's termination into an `Incoming::Terminated` signal, and the
 signal arrives after all of that actor's messages. `context.reply_to` lets an actor receive a
-reply as an ordinary message.
+reply as an ordinary message. Next, the group asks all of its devices at once.

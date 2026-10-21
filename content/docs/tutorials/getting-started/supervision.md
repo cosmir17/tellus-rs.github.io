@@ -35,9 +35,18 @@ A device which fails more than three times stops for good. The count starts over
 run for 30 seconds without failing, the default of `RestartPolicy`. Since the group watches its
 devices, it gets `Terminated` and prunes the device, just as for a retired one.
 
-## Run it
+## Talking to the group
 
 {{<example path="tellus/examples/tutorials/getting_started/06_supervision.rs" anchor="main"/>}}
+
+`main` records readings for four devices, among them an invalid one for `left` and four invalid ones
+for `broken`, retires `right` and asks for the average. The query waits until `broken` has used up
+its restarts and stopped, which takes about two seconds, so `main` asks with a timeout of five
+seconds here.
+
+## Run it
+
+From a clone of the tellus repository:
 
 ```sh
 RUST_LOG=tellus=debug cargo run --quiet -p tellus --example getting_started_06_supervision
@@ -53,14 +62,11 @@ Average temperature: 20.40
 stopped. `right` retired. Only `middle` still has a reading.
 
 On stderr tellus logs every failure and restart, as JSON because the example configures the
-tracing subscriber that way. The answer takes about two seconds, because the query waits until
-`broken` has used up its restarts and stopped. That is why `main` asks with a timeout of five
-seconds here.
+tracing subscriber that way.
 
 ## What you learned
 
 An actor fails by returning an error or panicking. Its supervision strategy decides whether it
 restarts or stops. A restart rebuilds the state but keeps the address and the mailbox. Together
-with watch, the group copes with devices failing for good.
-
-In the last step you put a manager on top of the groups.
+with watch, the group copes with devices failing for good. Next, you put a manager on top of the
+groups.

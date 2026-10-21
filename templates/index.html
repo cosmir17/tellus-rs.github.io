@@ -6,7 +6,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     "name": "tellus",
-    "description": "An actor framework for Rust, built on Tokio: typed actors as state machines, supervision trees, an ordered death watch and event sourcing.",
+    "description": "An actor framework for Rust, built on Tokio: typed actors as state machines, supervision trees, an ordered death watch, event sourcing and a cluster.",
     "url": "https://tellus.rs/",
     "codeRepository": "https://github.com/tellus-rs/tellus",
     "programmingLanguage": "Rust",
@@ -15,6 +15,7 @@
     "author": { "@type": "Person", "name": "Heiko Seeberger", "url": "https://heikoseeberger.de" }
   }
   </script>
+  <link rel="stylesheet" href="{{ get_url(path='vendor/asciinema-player-3.17.0/asciinema-player.css') }}">
 {% endblock head %}
 
 {% block content %}
@@ -24,7 +25,7 @@
       <div>
         <div class="eyebrow"><span class="pill">{{ tellus_manifest.package.version }}</span> actor framework for Rust <span aria-hidden="true">·</span> built on Tokio <span aria-hidden="true">·</span> Apache 2.0</div>
         <h1>Actors for Rust, on <span class="ground">solid ground.</span></h1>
-        <p class="lede">tellus gives you typed actors as state machines, supervision trees and a death watch you can reason about. Add event sourcing when you need it, and soon a cluster, through the same API.</p>
+        <p class="lede">tellus gives you typed actors as state machines, supervision trees and a death watch you can reason about. Add event sourcing and a cluster when you need them, through the same API.</p>
         <div class="cta">
           <div class="install" id="install"><span class="prompt">$</span><span id="install-cmd">cargo add tellus</span><button type="button" id="copy-btn">copy</button></div>
           <a class="btn btn-primary" href="{{ get_url(path="@/docs/tutorials/getting-started/_index.md") }}">Start the tutorial</a>
@@ -38,7 +39,7 @@
         <div class="layer l4"><div class="rock" style="min-height:64px"></div><div class="log"><a href="#watch"><b>Death watch</b><span>Terminated arrives after every message.</span></a></div></div>
         <div class="layer l3"><div class="rock" style="min-height:50px"></div><div class="log"><a href="#supervision"><b>Supervision</b><span>Restart with backoff, or stop.</span></a></div></div>
         <div class="layer l2 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#persistence"><b>Event sourcing</b><span>Replay, snapshots, fencing. <code>persistence</code></span></a></div></div>
-        <div class="layer l1 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#cluster"><b>Cluster <span class="soon">coming soon</span></b><span>Remote tell, ask and watch over QUIC. <code>cluster</code></span></a></div></div>
+        <div class="layer l1 opt"><div class="rock" style="min-height:58px"></div><div class="log"><a href="#cluster"><b>Cluster</b><span>Remote tell, ask and watch over QUIC. <code>cluster</code></span></a></div></div>
         <div class="core-foot"><i class="std">always on</i><i>opt-in feature</i></div>
       </div>
     </div>
@@ -88,7 +89,7 @@
           <p>The signal is ordered behind every delivered message and proves that the actor's destructors have run. It is delivered even when a bounded mailbox is full.</p>
         </div>
         <div>
-          <span class="tag">across nodes <span class="soon">coming soon</span></span>
+          <span class="tag">across nodes</span>
           <h3>Same API, two tiers</h3>
           <p>A real termination keeps the full local contract over the wire. If a node is downed instead, the synthesized signal guarantees that no message from that actor is ever delivered through this endpoint again.</p>
         </div>
@@ -167,52 +168,37 @@
 
   <section class="stratum cluster" id="cluster">
     <div class="wrap">
-      <div class="depth">Cluster <code>cluster</code> <span class="soon">coming soon</span></div>
+      <div class="depth">Cluster <code>cluster</code></div>
       <div class="split">
         <div class="prose">
           <h2>Same API, many nodes.</h2>
         </div>
         <div class="prose" style="align-self:end">
-          <p>With the upcoming <code>cluster</code> feature, <code>ActorRef</code> becomes serializable, so a message can carry a reference to an actor on any node. You will <code>tell</code>, <code>ask</code> and <code>watch</code> remote actors through the same API as local ones. Nodes will find each other through seed discovery, gossip their membership, and agree on who is gone. It is not part of a release yet.</p>
+          <p>With the <code>cluster</code> feature, <code>ActorRef</code> is serializable, so a message can carry a reference to an actor on any node. You <code>tell</code>, <code>ask</code> and <code>watch</code> remote actors through the same API as local ones. Nodes find each other through seed discovery, gossip their membership, and agree on who is gone. The <a href="{{ get_url(path="@/docs/tutorials/clustered-actors/_index.md") }}">clustered actors tutorial</a> spreads the device manager over three nodes.</p>
         </div>
       </div>
 
-      <div class="terminal" role="img" aria-label="Placeholder for a recording of the tellus cluster demo">
+      <div class="terminal">
         <div class="term-bar"><i></i><i></i><i></i><span>tellus-cluster-demo-tui · 5 nodes · chaos on</span></div>
-        <div class="term-body">
-          <div class="term-ghost" aria-hidden="true">MEMBERSHIP     node1   node2   node3   node4   node5
-node1          <span class="up">up</span>      <span class="up">up</span>      <span class="up">up</span>      <span class="up">up</span>      <span class="up">up</span>
-node2          <span class="up">up</span>      <span class="up">up</span>      <span class="up">up</span>      <span class="dn">down</span>    <span class="dn">down</span>
-node3          <span class="up">up</span>      <span class="up">up</span>      <span class="up">up</span>      <span class="dn">down</span>    <span class="dn">down</span>
-node4          <span class="dn">down</span>    <span class="dn">down</span>    <span class="dn">down</span>    <span class="up">up</span>      <span class="up">up</span>
-node5          <span class="dn">down</span>    <span class="dn">down</span>    <span class="dn">down</span>    <span class="up">up</span>      <span class="up">up</span>
-
-TIMELINE
-  chaos      partition {node1,node2,node3} | {node4,node5}
-  node1      node4 unreachable, phi above threshold
-  node1      keep_majority: downing node4, node5
-  verifier   quiet window: converged, probes ok, receptionist settled</div>
-          <div class="term-note">
-            <span class="term-play" aria-hidden="true"></span>
-            <b>Recording coming soon</b>
-            <span>Five nodes under continuous crashes, departures and partitions, with a verifier checking convergence, cross-node messaging and the receptionist in every quiet window.</span>
-          </div>
-        </div>
+        <div class="term-player" id="cluster-demo" data-cast="{{ get_url(path='casts/cluster-demo.cast') }}"></div>
+        <p class="term-caption">Five nodes under continuous crashes, departures and partitions, with a verifier checking convergence, cross-node messaging and the receptionist in every quiet window. <a href="{{ config.extra.repo }}/tree/main/tellus-cluster-demo">Run it yourself</a>.</p>
       </div>
 
-      <p class="soon-note">What the <code>cluster</code> feature brings, not released yet:</p>
       <div class="features">
-        <div><h3>QUIC with TLS</h3><p>Transport over quinn with TLS included, and per-sender FIFO across the wire.</p></div>
+        <div><h3>QUIC with mutual TLS</h3><p>Transport over quinn, with every node authenticated by the cluster's own certificate authority, and messages in order per sender and recipient across the wire.</p></div>
+        <div><h3>Address-bound certificates</h3><p>A node is admitted only at an address its certificate covers, so an authenticated node cannot claim another member's address.</p></div>
         <div><h3>Seed discovery</h3><p>Fixed seeds, DNS SRV or A/AAAA records, or Kubernetes pods by label selector.</p></div>
         <div><h3>Gossiped membership</h3><p>The member list is a state-based CRDT, so duplicated, reordered or crossed gossip cannot corrupt it.</p></div>
         <div><h3>Failure detection and downing</h3><p>Phi accrual detection and a pluggable downing provider; <code>keep_majority</code> by default.</p></div>
+        <div><h3>Graceful leave</h3><p>A node that stops announces its departure and drains its queues, so the others list it as left without detecting a failure.</p></div>
+        <div><h3>Cluster identity</h3><p>Every cluster has an ID, and every connection names it. A node of another cluster is refused, and a split is reported, never merged silently.</p></div>
         <div><h3>Receptionist and pub-sub</h3><p>Register actors under a key, look them up across the cluster, and publish to every subscriber of a topic.</p></div>
         <div><h3>Observable cluster state</h3><p>A versioned value on every change; <code>tellus-cluster-inspect</code> serves it to you as server-sent events.</p></div>
       </div>
 
       <div class="config-pair" style="margin-top:32px">
-        {{<code path="snippets/cluster-default.yaml" lang="yaml" title="config/default.yaml, upcoming"/>}}
-        {{<code path="snippets/cluster-k8s.yaml" lang="yaml" title="config/k8s.yaml, upcoming"/>}}
+        {{<code path="tellus/tellus-cluster-demo/config/default.yaml" lang="yaml" title="tellus-cluster-demo/config/default.yaml"/>}}
+        {{<code path="tellus/tellus-cluster-demo/config/k8s.yaml" lang="yaml" title="tellus-cluster-demo/config/k8s.yaml"/>}}
       </div>
 
       <div class="next-up"><span>On the roadmap:</span><span class="pill">cluster singleton</span><span class="pill">sharding</span></div>
@@ -270,4 +256,19 @@ TIMELINE
       </div>
     </div>
   </section>
+  <script src="{{ get_url(path='vendor/asciinema-player-3.17.0/asciinema-player.min.js') }}"></script>
+  <script>
+    (() => {
+      const element = document.getElementById('cluster-demo');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      AsciinemaPlayer.create(element.dataset.cast, element, {
+        autoPlay: !reducedMotion,
+        loop: true,
+        speed: 6,
+        preload: true,
+        fit: 'width',
+        poster: 'npt:0:20',
+      });
+    })();
+  </script>
 {% endblock content %}

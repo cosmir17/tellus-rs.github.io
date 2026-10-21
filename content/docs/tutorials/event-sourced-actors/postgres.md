@@ -6,13 +6,8 @@ weight      = 4
 
 The in-memory store forgets everything when the process ends. For real persistence, the
 [`tellus-persistence-postgres`](https://crates.io/crates/tellus-persistence-postgres) crate stores
-events and snapshots in PostgreSQL. The device stays as in the previous step, apart from its persistence
-ID. The store and `main` change.
-
-```sh
-cargo add tellus-persistence-postgres
-cargo add sqlx --features runtime-tokio,postgres
-```
+events and snapshots in PostgreSQL. The device stays as in the previous step, apart from its
+persistence ID. The store and `main` change.
 
 ## Using the PostgreSQL store
 
@@ -34,12 +29,19 @@ cargo run --quiet -p tellus-persistence-postgres --example event_sourced_04_post
 cargo run --quiet -p tellus-persistence-postgres --example event_sourced_04_postgres
 ```
 
+It prints:
+
 ```txt
 Readings so far: 1
 Readings so far: 2
 ```
 
 `docker compose down -v postgres` stops the database and resets the readings.
+
+## What you learned
+
+Moving from memory to PostgreSQL changes the store, not the device, apart from its persistence ID.
+With a database behind it, the device's events survive the process.
 
 ## Where to go from here
 
