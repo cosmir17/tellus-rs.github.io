@@ -6,8 +6,8 @@ weight      = 4
 
 `tell` never blocks. If a producer sends faster than an actor can handle, the mailbox grows. By
 default it grows without limit. A bounded mailbox grows until it is full, and then further messages
-are dropped. Neither slows the producer down. For backpressure, let the consumers decide when they get
-work: with work pulling, a worker asks for the next job when it is ready for it.
+are dropped. Neither slows the producer down. For backpressure, let the consumers decide when they
+get work: with work pulling, a worker asks for the next job when it is ready for it.
 
 The examples on this page come from a manager which owns a queue of documents and three workers
 which count their words.
@@ -51,11 +51,11 @@ Each worker has at most one request in flight, so the manager never holds more r
 are workers. When the protocol bounds the number of messages in flight like this, the capacity
 documents and enforces that bound.
 
-The capacity must not be smaller than that bound. A dropped request takes its `ReplyTo` with it,
-and nothing ever answers the worker. With a capacity of one for the manager, one or two of the
-three first requests are dropped. The workers whose requests got through still process all
-documents. But the workers whose requests were dropped never stop, so the manager waits for them
-forever. Run it with `RUST_LOG=warn`, and the dead letters in the log tell why.
+The capacity must not be smaller than that bound. A dropped request takes its `ReplyTo` with it, and
+nothing ever answers the worker. With a capacity of one for the manager, a first request can be
+dropped when it arrives while the mailbox still holds another one. The workers whose requests got
+through still process all documents. But a worker whose request was dropped never stops, so the
+manager waits for it forever. Run it with `RUST_LOG=warn`, and the dead letters in the log tell why.
 
 ## Bound every mailbox
 

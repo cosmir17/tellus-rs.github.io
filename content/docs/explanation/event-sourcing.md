@@ -1,7 +1,7 @@
 +++
 title       = "Event sourcing"
 description = "How event-sourced actors persist, recover and evolve, and what tellus guarantees about it."
-weight      = 6
+weight      = 7
 +++
 
 An event-sourced actor stores what happened to it, not what its state is. Its state is the result

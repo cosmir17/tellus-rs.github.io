@@ -66,12 +66,32 @@ waiting in its mailbox. tellus enforces this on the watcher's side and drops suc
 
 ## Across nodes
 
-The upcoming `cluster` feature extends watch to actors on other nodes, through the same API. A
-real termination, reported over the wire, keeps the full local guarantee. If instead a node is
-declared down, for example after a network partition, its actors cannot report their own
-termination. The watcher then gets a synthesized signal, which guarantees that no message from
-that actor is ever delivered through this node again.
+With the `cluster` feature, `context.watch` works on a reference to an actor on another node, too.
+The guarantee then comes in two tiers, which the API does not tell apart.
+
+A real termination keeps the full guarantee. The watched actor's node sends the terminated signal
+over the wire as part of the actor's termination, behind every message the actor sent the watcher,
+so it arrives behind all of them, exactly as within one process. It also proves that the actor's
+destructors have run.
+
+A node that crashes or is cut off cannot report anything. Once the cluster has downed that node,
+see [Membership and downing](@/docs/explanation/membership-and-downing.md), the watcher gets a
+synthesized signal instead. That signal promises less: the actor may still be running on the other
+side of a partition, and its destructors may never run. It guarantees one thing, by construction:
+no message from that actor is ever delivered on this node again. That is still enough for what the
+guarantee is used for, such as a query that stops waiting for an answer that cannot come anymore.
+
+Two more cases fire a synthesized signal without a downing, and they do not carry even that
+promise. In the first, the watch cannot be sent: towards an address tellus refuses, towards a
+connection bound to another incarnation, or while this node is downed or leaving. In the second,
+tellus gives up connecting to an address that no member advertises, and signals every actor watched
+there. Neither case marks the watched node down, so a message from the actor may still arrive
+afterwards. The API does not tell these signals apart from the others.
+
+Unwatching stays absolute across nodes, and watching stays race-free: watching an actor that has
+already terminated, or one on a node that is already down, signals right away.
 
 For the implementation, see
-[Death watch](https://github.com/tellus-rs/tellus/blob/main/docs/actors.md#death-watch) in the
+[Death watch](https://github.com/tellus-rs/tellus/blob/main/docs/actors.md#death-watch) and, across
+nodes, [Guarantees](https://github.com/tellus-rs/tellus/blob/main/docs/cluster.md#guarantees) in the
 internals documentation.

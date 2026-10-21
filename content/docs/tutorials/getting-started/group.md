@@ -17,8 +17,8 @@ to the devices. The device actor is the one from the previous step.
 When a reading arrives for an unknown device, `context.spawn(Device)` creates a new device as a
 child of the group and returns its `ActorRef`. The group stores it and forwards the reading.
 
-`Read` shows that a `ReplyTo` can travel. The group does not answer itself: it hands the request's
-`ReplyTo` on to the device, and the device replies directly to whoever asked. For an unknown
+`Read` shows that a `ReplyTo` can travel. The group does not answer itself: it forwards the
+request's `ReplyTo` to the device, and the device replies directly to whoever asked. For an unknown
 device the group replies `None` itself.
 
 ## Talking to the group
@@ -32,6 +32,8 @@ From a clone of the tellus repository:
 ```sh
 cargo run --quiet -p tellus --example getting_started_03_group
 ```
+
+It prints:
 
 ```txt
 Last reading of left: 22.0

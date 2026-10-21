@@ -10,8 +10,7 @@ retire before it answers. In this step a short-lived query actor does the asking
 
 The handover from the previous step has served its purpose, so devices now simply stop on
 `Retire`. The group's `Read` gives way to `Average`. Devices keep their `Read`: the query uses it.
-The group also no longer stops when its last device is gone, and `main` now ends with
-`system.stop()`.
+The group also no longer stops when its last device is gone.
 
 ## One query actor per request
 
@@ -39,13 +38,22 @@ on `ask` in `main`, at the boundary to the outside world.
 When a reading does arrive, the query calls `context.unwatch`. After `unwatch` returns, the query
 never receives a terminated signal for that device, even if one was already on its way.
 
-## Run it
+## Talking to the group
 
 {{<example path="tellus/examples/tutorials/getting_started/05_query.rs" anchor="main"/>}}
+
+`main` records readings for three devices, retires `right` and asks for the average. Since the
+group no longer stops on its own, `main` ends with `system.stop()`.
+
+## Run it
+
+From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --example getting_started_05_query
 ```
+
+It prints:
 
 ```txt
 Average temperature: 20.95

@@ -34,6 +34,8 @@ From a clone of the tellus repository:
 cargo run --quiet -p tellus --features persistence-in-memory --example event_sourced_02_supervision
 ```
 
+It prints:
+
 ```txt
 Last reading after the restart: 21.5
 ```

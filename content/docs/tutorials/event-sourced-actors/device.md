@@ -8,13 +8,8 @@ An event-sourced actor stores what happened, not what its state is. For a device
 that a reading is recorded. In this step the device persists every reading as an event, and a new
 actor system over the same store recovers the last reading by replaying those events.
 
-Add the `persistence-in-memory` feature, which brings an in-memory store for trying things out
-and for tests:
-
-```sh
-cargo add tellus --features persistence-in-memory
-cargo add serde --features derive
-```
+This tutorial needs the `persistence-in-memory` feature, which brings an in-memory store for
+trying things out and for tests.
 
 ## Commands and events
 
@@ -44,9 +39,9 @@ had.
 `persistence_id` names the device's stream of events. Every incarnation of this device, today or
 next year, reads and writes the same stream. `init` is the state before any event.
 `init_from_snapshot` is unreachable here, because `Nothing` as the snapshot type means no
-snapshots. Step 3 adds them.
+snapshots. [Snapshots](@/docs/tutorials/event-sourced-actors/snapshots.md) adds them.
 
-## Run it
+## Talking to the device
 
 {{<example path="tellus/examples/tutorials/event_sourced/01_device.rs" anchor="main"/>}}
 
@@ -58,16 +53,22 @@ the two events and answers with the last one.
 Notice the `ask` before the first `stop`. `stop` takes effect between two commands, so without
 waiting for an answer, the queued readings might never be handled.
 
+## Run it
+
 From a clone of the tellus repository:
 
 ```sh
 cargo run --quiet -p tellus --features persistence-in-memory --example event_sourced_01_device
 ```
 
+It prints:
+
 ```txt
 Last reading before stopping: 22.0
 Last reading after recovery: 22.0
 ```
+
+Both answers are the same: the second system has recovered the reading from the events alone.
 
 ## What you learned
 

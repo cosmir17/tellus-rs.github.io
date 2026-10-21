@@ -20,9 +20,17 @@ For `Average`, the request's `ReplyTo` now travels two levels down: from the man
 and from the group into a new query actor. The query replies directly to whoever asked. For an
 unknown group the manager replies `None` itself.
 
-## Run it
+## Talking to the manager
 
 {{<example path="tellus/examples/tutorials/getting_started/07_device_manager.rs" anchor="main"/>}}
+
+`main` records readings in two groups, retires a device and asks the manager for the average of
+three groups, one of which does not exist. Stopping the system stops the whole tree bottom-up:
+devices first, then groups, then the manager.
+
+## Run it
+
+From a clone of the tellus repository:
 
 ```sh
 RUST_LOG=tellus=debug cargo run --quiet -p tellus --example getting_started_07_device_manager
@@ -39,8 +47,6 @@ No readings in garage
 In the attic, `right` retired, so only `left` counts. In the cellar, `boiler` failed on the invalid
 reading and restarted without its 11.0. The garage does not exist.
 
-Stopping the system stops the whole tree bottom-up: devices first, then groups, then the manager.
-
 ## What you learned
 
 Actor trees compose: each actor knows only its direct children. A `ReplyTo` lets the query at the
@@ -56,5 +62,5 @@ watch with its ordering guarantee, and supervision.
 
 The next tutorials build on this one.
 [Event-sourced actors](@/docs/tutorials/event-sourced-actors/_index.md) makes the devices survive
-restarts, and [Clustered actors](@/docs/tutorials/clustered-actors/_index.md), coming soon, will
-spread them across nodes.
+restarts, and [Clustered actors](@/docs/tutorials/clustered-actors/_index.md) spreads them across
+nodes.
