@@ -2,6 +2,7 @@
 html { scroll-behavior: smooth; scroll-padding-top: calc(60px + env(safe-area-inset-top, 0px) + 16px); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
+  margin: 0;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--f-body);
