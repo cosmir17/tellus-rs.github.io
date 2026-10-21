@@ -1,0 +1,5 @@
+.articles { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.articles a { display: grid; gap: 2px; padding: 14px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); }
+.articles a:hover b { color: var(--accent); }
+.articles time { font-family: var(--f-mono); font-size: var(--t-xs); color: var(--ink-3); }
+.articles b { font-family: var(--f-display); font-size: 1.12rem; line-height: 1.3; }

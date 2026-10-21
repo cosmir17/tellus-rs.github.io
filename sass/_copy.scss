@@ -1,0 +1,17 @@
+.copy-btn {
+  display: inline-flex; align-items: center; gap: 6px; flex: none;
+  font: inherit; font-family: var(--f-mono); font-size: var(--t-xs); line-height: 1;
+  color: var(--code-dim); background: var(--code-bg); border: 1px solid #3a423c; border-radius: 6px;
+  padding: 4px 7px; cursor: pointer; transition: color 0.2s, border-color 0.2s;
+}
+.copy-btn:hover, .copy-btn:focus-visible { color: var(--code-fg); border-color: var(--code-dim); }
+.copy-btn svg { width: 14px; height: 14px; }
+.copy-btn .done { display: none; }
+.copy-btn.copied { color: var(--code-ty); border-color: var(--code-ty); }
+.copy-btn.copied .idle { display: none; }
+.copy-btn.copied .done { display: inline; }
+.copy-float { position: relative; }
+.copy-float > .copy-btn { position: absolute; top: 8px; right: 8px; }
+.prose-md .code pre { border-radius: 0; }
+
+.prose-md .diagram { margin-block: 2em; }
