@@ -4,8 +4,8 @@ description = "Put a manager on top of the groups and route commands through the
 weight      = 7
 +++
 
-A building has more than one room. In this last step a device manager sits on top: it spawns a
-group per room on demand and routes every command to the right group. The groups, the devices and
+A building has more than one room. In this step a device manager sits on top: it spawns a group
+per room on demand and routes every command to the right group. The groups, the devices and
 the query actor are those from the previous step, unchanged.
 
 ## The manager
@@ -53,14 +53,4 @@ Actor trees compose: each actor knows only its direct children. A `ReplyTo` lets
 bottom answer the asker directly, without going back through the group and the manager. If you
 know the IoT device manager from the
 [Apache Pekko documentation](https://pekko.apache.org/docs/pekko/current/typed/guide/tutorial.html),
-this is tellus's take on it.
-
-## Where to go from here
-
-You have used the core features of tellus: actors with state, `tell` and `ask`, child actors,
-watch with its ordering guarantee, and supervision.
-
-The next tutorials build on this one.
-[Event-sourced actors](@/docs/tutorials/event-sourced-actors/_index.md) makes the devices survive
-restarts, and [Clustered actors](@/docs/tutorials/clustered-actors/_index.md) spreads them across
-nodes.
+this is tellus's take on it. Next, readings go stale.
