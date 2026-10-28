@@ -8,7 +8,7 @@ aliases     = [ "/guide/tutorial/hello/" ]
 In this tutorial you build a small temperature monitor: devices record readings, a group manages
 its devices, and you can ask the group for the average temperature. Each step is a complete
 program that compiles and runs. Besides tellus and Tokio, the programs use anyhow for errors, and
-the last two steps also use thiserror and tracing-subscriber.
+the last three steps also use thiserror and tracing-subscriber.
 
 ## Set up a project
 
@@ -40,9 +40,11 @@ Hello, Tellus!
 
 ## What happens here
 
-An actor is a value whose type implements the `Actor` trait. The trait has three associated types:
+An actor is a value whose type implements the `Actor` trait. The trait has four associated types:
 
 - `Message` is the type of the messages the actor receives, here `Greet`.
+- `Timers` says whether the actor can start timers. The greeter needs none, so it is `Untimed`.
+  [A later step](@/docs/tutorials/getting-started/stale-readings.md) uses them.
 - `State` is the actor's state. The greeter needs none, so it is `()`.
 - `Error` is the type of the actor's failures. The greeter cannot fail, so it is `Infallible`.
 
@@ -59,6 +61,6 @@ time, from start to finish.
 
 ## What you learned
 
-An actor is a type that implements `Actor`: its message, state and error types, an `init` that
-creates the state and a `receive` that handles one message at a time. `ActorSystem::new` spawns it,
-and `tell` sends it a message. Next, you give an actor state that changes with every message.
+An actor is a type that implements `Actor`: its associated types, an `init` that creates the
+state and a `receive` that handles one message at a time. `ActorSystem::new` spawns it, and `tell`
+sends it a message. Next, you give an actor state that changes with every message.

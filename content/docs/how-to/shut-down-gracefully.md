@@ -1,7 +1,7 @@
 +++
 title       = "Shut down gracefully"
 description = "Take a node out of the load balancer's rotation, drain its requests, leave the cluster and exit."
-weight      = 6
+weight      = 7
 +++
 
 A node that is stopped should neither fail the requests a load balancer still sends it nor leave
