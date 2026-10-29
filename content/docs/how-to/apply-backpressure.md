@@ -61,19 +61,24 @@ manager waits for it forever. Run it with `RUST_LOG=warn`, and the dead letters 
 
 A bounded mailbox is not backpressure. When it is full, `tell` drops the newest message and logs
 it at warn level as a dead letter, with the actor ID and the message type. An `ask` to a full
-mailbox fails with `AskError::MailboxFull`. A terminated signal is always delivered, whatever the
-capacity.
+mailbox fails with `AskError::MailboxFull`. A terminated signal, a `reply_to` reply and the output
+of a piped future are always delivered, whatever the capacity.
 
 Still, bound every mailbox. An unbounded mailbox hides overload until the process runs out of
-memory. A bounded one caps the memory and reports every dropped message in the log. Size it by the
-number of messages the protocol allows in flight, as above. Where the protocol does not bound
-them, size it by the largest burst the actor should absorb, and decide what a dropped message
-costs:
+memory. A bounded one caps the memory taken by ordinary messages and reports every dropped message
+in the log. Size it by the number of messages the protocol allows in flight, as above. Where the
+protocol does not bound them, size it by the largest burst the actor should absorb, and decide what
+a dropped message costs:
 
 - A dropped periodic reading costs little, because the next reading follows soon anyway.
 - A dropped request costs its answer. From outside an actor, send it with `ask`, which fails with
   `AskError::MailboxFull` right away. Between actors, bound the requests in flight by the
   protocol, as work pulling does.
+
+The capacity does not cap what the actor started itself. Each future it piped and each `ReplyTo` it
+has open can add one message past the capacity, and nothing limits how many of them are open. An
+actor which pipes a future or opens a `ReplyTo` per request to a slow backend can hence hold far
+more messages than its capacity. Bound its open requests, e.g. with a window.
 
 The default is unbounded only because no capacity fits every actor. Configure the capacity with
 `ActorConfig`, in code as above or [from a file](@/docs/how-to/configure-supervision.md).
