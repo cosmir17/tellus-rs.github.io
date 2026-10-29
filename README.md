@@ -30,8 +30,15 @@ line removed from every line:
 relative to the site root and a title, which the landing page uses.
 
 The submodule is pinned to the latest tellus release, so the docs match the crate on crates.io.
-After every release, pin it to the new tag. The version on the landing page is read from the
-submodule, so pinning is the only step:
+The version on the landing page is read from the submodule.
+
+A daily workflow (`pin-tellus.yml`) notices a new `tellus-v*` tag and pins it on the branch
+`pin/<tag>`. It then opens a draft pull request listing every tellus change since the last pin. It
+needs "Allow GitHub Actions to create and approve pull requests" in the repository's Actions
+settings. Before the pull request is marked ready, every listed change is reviewed for statements
+on the site which it makes false, with the `update-site-docs` skill in `.claude/skills`.
+
+To pin by hand, without the pull request:
 
 ```shell
 just pin-tellus tellus-v0.4.0
