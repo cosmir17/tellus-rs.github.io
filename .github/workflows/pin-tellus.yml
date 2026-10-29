@@ -1,0 +1,63 @@
+name: Pin tellus
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  schedule:
+    - cron: "37 5 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  pin:
+    name: Open pin PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Find a new release
+        id: release
+        run: |
+          git -C tellus fetch --quiet --tags origin
+          pinned=$(git -C tellus describe --tags --exact-match --match 'tellus-v*' HEAD)
+          latest=$(git -C tellus tag --list 'tellus-v*' --sort=-version:refname | head -n 1)
+          echo "pinned=$pinned" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          if [ "$pinned" = "$latest" ] || git ls-remote --exit-code --heads origin "pin/$latest" > /dev/null; then
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Move the submodule
+        if: steps.release.outputs.new == 'true'
+        env:
+          LATEST: ${{ steps.release.outputs.latest }}
+        run: |
+          git -C tellus checkout --quiet "$LATEST"
+          git switch --quiet -c "pin/$LATEST"
+          git add tellus
+          git -c user.name='github-actions[bot]' \
+            -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit --quiet -m "docs: pin tellus ${LATEST#tellus-v}"
+          git push --quiet origin "pin/$LATEST"
+
+      - name: Open draft pull request
+        if: steps.release.outputs.new == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PINNED: ${{ steps.release.outputs.pinned }}
+          LATEST: ${{ steps.release.outputs.latest }}
+        run: |
+          scripts/pin-pr-body.sh "$PINNED" "$LATEST" > "$RUNNER_TEMP/body.md"
+          gh pr create --draft --base main --head "pin/$LATEST" \
+            --title "docs: pin tellus ${LATEST#tellus-v}" \
+            --body-file "$RUNNER_TEMP/body.md" --assignee hseeberger
