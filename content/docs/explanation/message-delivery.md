@@ -22,6 +22,12 @@ stops before it gets to the message, the message is dropped with the rest of the
 actor fails while handling a message, that message is consumed and not delivered again, not even
 to the restarted actor.
 
+A full mailbox still takes two kinds of messages the actor asked for itself: the reply to a
+`ReplyTo` it created with `context.reply_to`, and the output of a future it piped with
+`pipe_to_self`. An actor which waits for one would wait forever if it were dropped, so tellus
+enqueues it past the capacity. It still counts against the capacity, so ordinary messages are
+dropped until the actor has worked its mailbox back under it.
+
 At least once would need acknowledgements and redelivery, and with them deduplication in every
 receiver. tellus leaves that to the protocols which need it, built from messages. `ask` provides
 the acknowledgement part: the caller learns whether a reply came. Redelivery is up to the caller.
@@ -41,12 +47,19 @@ wrong, for example that the mailbox was full, that the actor has terminated, tha
 elapsed, or that the `ReplyTo` was dropped without a reply. The reply is delivered at most
 once, too: a reply after the timeout is a dead letter.
 
+Between actors, a `ReplyTo` from `context.reply_to` has no such error. A reply the responder never
+sends, or one lost on its way from another node, is never reported. An actor which must notice a
+missing reply declares `type Timers = Timed`, starts a
+[timer](@/docs/tutorials/getting-started/stale-readings.md) per request and cancels it once the
+reply has arrived.
+
 ## Terminated signals bypass the capacity
 
 A terminated signal, which tells a watcher that a watched actor has terminated, bypasses the
 capacity of a bounded mailbox. A full mailbox never drops it; only `unwatch` or the watcher's own
-termination does. It also arrives
-behind every message the terminated actor delivered to the watcher, which is the
+termination does. Unlike a `reply_to` reply or the output of a piped future, which pass a full
+mailbox but count against its capacity (see above), a terminated signal does not count at all. It
+also arrives behind every message the terminated actor delivered to the watcher, which is the
 [death watch ordering guarantee](@/docs/explanation/death-watch-ordering.md).
 
 ## Across nodes

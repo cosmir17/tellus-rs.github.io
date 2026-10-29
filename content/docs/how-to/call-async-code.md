@@ -54,8 +54,7 @@ result arrives whenever the future is ready. Write `receive` so that it does not
 result arriving before anything else.
 
 **Stopping does not cancel the future.** If the actor has terminated by the time the future is
-ready, the result is dropped and logged as a dead letter. With a bounded mailbox, the result is
-also dropped and logged as a dead letter when the mailbox is full.
+ready, the result is dropped and logged as a dead letter.
 
 **A restart does not cancel the future either.** A restarted actor keeps its mailbox, so the result
 of a future piped before the restart is received by the new state. If an actor must tell such
