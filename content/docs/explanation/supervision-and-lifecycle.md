@@ -1,7 +1,7 @@
 +++
 title       = "Supervision and lifecycle"
 description = "How actors start, fail, restart and terminate, and in which order their resources are released."
-weight      = 5
+weight      = 6
 +++
 
 Every actor runs through the same lifecycle: it starts with `init`, handles messages with

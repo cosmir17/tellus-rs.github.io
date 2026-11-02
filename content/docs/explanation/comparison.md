@@ -1,7 +1,7 @@
 +++
 title       = "Rust actor frameworks compared"
 description = "How tellus differs from actix, kameo and ractor: message handlers, mailboxes, supervision, death watch, clustering and persistence."
-weight      = 8
+weight      = 9
 +++
 
 Rust has several actor frameworks. This page compares tellus with three widely used ones:

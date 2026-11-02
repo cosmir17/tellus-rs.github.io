@@ -1,7 +1,7 @@
 +++
 title       = "Message delivery"
 description = "What tellus guarantees about delivering messages: at most once, in order per sender, and dead letters for the rest."
-weight      = 3
+weight      = 4
 +++
 
 `tell` puts a message into an actor's mailbox and returns. It never blocks, and it never reports

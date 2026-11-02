@@ -53,6 +53,7 @@ Key facts for writing tellus code:
 
 ## Explanation
 
+- [Why tellus](https://tellus.rs/docs/explanation/why-tellus/): What tellus offers, how it compares with other Rust actor frameworks, what carries over from Akka and Erlang, and when it is not the right choice.
 - [The actor model in Rust](https://tellus.rs/docs/explanation/actor-model/): What actors are, why they suit Rust's ownership rules, and when tasks, channels or locks are the better choice.
 - [Actors as state machines](https://tellus.rs/docs/explanation/state-machines/): Why the state is passed into receive and returned from it, and how that models a state machine.
 - [Synchronous message handlers](https://tellus.rs/docs/explanation/synchronous-handlers/): Why receive is a plain function, and what that means for your code.

@@ -1,7 +1,7 @@
 +++
 title       = "Actors as state machines"
 description = "Why the state is passed into receive and returned from it, and how that models a state machine."
-weight      = 1
+weight      = 2
 +++
 
 An actor reacts to one message at a time, and how it reacts depends on what happened before. That

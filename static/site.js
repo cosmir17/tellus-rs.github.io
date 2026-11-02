@@ -16,26 +16,6 @@
     try { localStorage.setItem('tellus-theme', mode); } catch (e) {}
   });
 
-  const copyButton = document.getElementById('copy-btn');
-  if (copyButton) {
-    const command = document.getElementById('install-cmd');
-    const selectCommand = () => {
-      const range = document.createRange();
-      range.selectNodeContents(command);
-      const selection = getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
-    };
-    copyButton.addEventListener('click', () => {
-      const done = () => {
-        copyButton.textContent = 'copied';
-        setTimeout(() => { copyButton.textContent = 'copy'; }, 1600);
-      };
-      if (navigator.clipboard) navigator.clipboard.writeText(command.textContent).then(done, selectCommand);
-      else selectCommand();
-    });
-  }
-
   // data-axioms="create:8 send:9 next:12" tags the 1-based code lines a button highlights.
   const axiomCode = document.getElementById('axiom-code');
   if (axiomCode) {
