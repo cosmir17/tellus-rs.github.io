@@ -28,7 +28,9 @@ terminates, from the [watching step](@/docs/tutorials/getting-started/watch.md) 
 
 1. The children stop, and tellus waits until they have terminated.
 2. A backoff delay passes.
-3. `init` runs again, on the same actor value, and produces a fresh state.
+3. `init` runs again, on the same actor value, and produces a fresh state. An event-sourced actor
+   recovers its state by replay instead, see
+   [Event sourcing](@/docs/explanation/event-sourcing.md#recovery).
 
 The mailbox survives. Messages which arrived behind the failing message, or arrive during the
 backoff, are handled by the restarted actor. The failing message itself is not delivered again.
@@ -52,7 +54,9 @@ spawn.
 
 An actor stops when `receive` returns `Control::Stop`, when it fails under `Stop` or after its
 last allowed restart, or when its parent stops. For the root, `ActorSystem::stop` takes the
-parent's role. A stop never interrupts `receive`: the message being handled is finished first.
+parent's role. A stop never interrupts `receive`: the message being handled is finished first. An
+event-sourced actor also finishes settling its command, so its continuation, e.g. a reply, still
+runs.
 
 ## Terminating, in order
 

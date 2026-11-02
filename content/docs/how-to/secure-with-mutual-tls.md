@@ -43,6 +43,12 @@ certificate as both server and client, so both sides of every connection are aut
 without a certificate from the cluster's authority cannot complete a connection, so it reaches
 neither the protocol nor anybody's failure detection.
 
+TLS needs a crypto provider. `QuicTransport::mutual_tls` uses rustls's process default
+`CryptoProvider` if your application has installed one, and ring's default provider otherwise;
+tellus never installs a process default itself. QUIC needs TLS 1.3 with the cipher suite
+`TLS13_AES_128_GCM_SHA256`. An installed provider which lacks either makes `mutual_tls` fail, and
+it does not fall back to ring.
+
 ## Read the certificates from a config file
 
 With the `serde` feature, `QuicConfig` names the PEM files, so it can come from your configuration:

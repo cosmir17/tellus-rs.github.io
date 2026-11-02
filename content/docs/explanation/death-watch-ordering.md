@@ -14,7 +14,8 @@ the watcher. This page explains what the guarantee says, why it holds and what y
 terminated, the watcher receives `Incoming::Terminated` with the terminated actor's `ActorId`, in
 its ordinary mailbox, handled by `receive` like any message.
 
-Watching is race-free: if the actor has already terminated, the signal is delivered right away.
+Watching is race-free: if the actor has already terminated, the signal is queued at once, behind
+the messages already in the watcher's mailbox.
 A terminated signal is delivered even when the watcher's bounded mailbox is full, and it proves
 that the terminated actor's destructors have run.
 
@@ -89,7 +90,7 @@ there. Neither case marks the watched node down, so a message from the actor may
 afterward. The API does not tell these signals apart from the others.
 
 Unwatching stays absolute across nodes, and watching stays race-free: watching an actor that has
-already terminated, or one on a node that is already down, signals right away.
+already terminated, or one on a node that is already down, queues the signal at once.
 
 For the implementation, see
 [Death watch](https://github.com/tellus-rs/tellus/blob/main/docs/actors.md#death-watch) and, across
