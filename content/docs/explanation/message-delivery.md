@@ -88,10 +88,11 @@ order, with gaps: never reordered, never duplicated, possibly missing.
 `ask` crosses nodes through the same API, and the `ReplyTo` travels inside the message. It still
 resolves exactly once, at the latest at its timeout, and the reply stays in order with the other
 messages the responder sends the asker. Noticing a `ReplyTo` that was dropped without a reply is
-only best effort across nodes, so such an ask may end with its timeout instead. Three errors exist
-only for remote requests: the message cannot be encoded, it is too large to send, or this node's
-endpoint has not been started. Encoding and size errors are not transient: retrying the unchanged
-request fails again.
+only best effort across nodes, so such an ask may end with its timeout instead. A full queue toward
+the actor's node fails an ask as `AskError::MailboxFull`, and an unreachable node as
+`AskError::ActorTerminated`. Three errors exist only for remote requests: the message cannot be
+encoded, it is too large to send, or this node's endpoint has not been started. Encoding and size
+errors are not transient: retrying the unchanged request fails again.
 
 ## What this means for your code
 
