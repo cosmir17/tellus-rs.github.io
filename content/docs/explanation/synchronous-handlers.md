@@ -1,7 +1,7 @@
 +++
 title       = "Synchronous message handlers"
 description = "Why receive is a plain function, and what that means for your code."
-weight      = 2
+weight      = 3
 +++
 
 In tellus, `receive` is a plain function, not an `async fn`. An actor handles a message from start

@@ -1,7 +1,7 @@
 +++
 title       = "The actor model in Rust"
 description = "What actors are, why they suit Rust's ownership rules, and when tasks, channels or locks are the better choice."
-weight      = 0
+weight      = 1
 +++
 
 The actor model is a model of concurrent computation, introduced by Carl Hewitt and colleagues in

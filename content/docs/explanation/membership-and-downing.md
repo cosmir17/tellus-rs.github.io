@@ -1,7 +1,7 @@
 +++
 title       = "Membership and downing"
 description = "How tellus nodes agree on who belongs to the cluster, decide that a node is gone, and where that agreement ends."
-weight      = 7
+weight      = 8
 +++
 
 A cluster has no leader that decides who belongs to it. Every node keeps its own list of members,
