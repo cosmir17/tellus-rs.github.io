@@ -36,7 +36,7 @@ split in two:
 - `apply` changes the state. It folds one event into the state and is the only state transition.
 
 tellus appends the events to the store, and only then applies them. On recovery, it replays the
-stored events through the same `apply`, so the recovered state is exactly the state the device
+stored events through the same `apply`, so the recovered state is the state the device
 had.
 
 `persistence_id` names the device's stream of events. Every incarnation of this device, today or

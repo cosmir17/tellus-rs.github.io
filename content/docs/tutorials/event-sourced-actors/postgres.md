@@ -13,8 +13,17 @@ persistence ID. The store and `main` change.
 
 {{<example path="tellus-persistence-postgres/examples/tutorials/event_sourced/04_postgres.rs" anchor="main"/>}}
 
-`PostgresStore` wraps a `sqlx` connection pool. `migrate` creates the tables for events and
-snapshots if they do not exist yet. The same store serves as event store and snapshot store.
+`PostgresStore` wraps a `sqlx` connection pool. The pool bounds its own calls: the server cancels
+a statement after 3 s, and waiting for a free connection takes at most 3 s. tellus gives up on a
+store call after the timeout of `Persistence`, 10 s by default. Giving up does not end a statement
+in the server, so the pool has to end a call first. A call can take the acquire timeout plus twice
+the statement timeout, here 9 s; the
+[README](https://github.com/tellus-rs/tellus/blob/main/tellus-persistence-postgres/README.md#timeouts)
+of `tellus-persistence-postgres` explains why.
+
+`migrate` creates the tables for events and snapshots, `tellus_events` and `tellus_snapshots`,
+unless it has created them before. It fails on a table of either name which it has not created. The
+same store serves as event store and snapshot store.
 
 Every run of this program records one reading and then asks for the readings. Since the device
 recovers all earlier readings from the database, the count grows from run to run.

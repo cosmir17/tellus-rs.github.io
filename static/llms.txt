@@ -25,7 +25,7 @@ Key facts for writing tellus code:
 - [Watching devices](https://tellus.rs/docs/tutorials/getting-started/watch/): Learn when an actor has terminated, and rely on having seen all of its messages.
 - [Asking all devices](https://tellus.rs/docs/tutorials/getting-started/query/): Collect answers from many actors with a short-lived query actor, without timeouts.
 - [When devices fail](https://tellus.rs/docs/tutorials/getting-started/supervision/): Let failing actors restart with backoff, and stop them when they keep failing.
-- [A device manager](https://tellus.rs/docs/tutorials/getting-started/device-manager/): Put a manager on top of the groups and route commands through the actor tree.
+- [A device manager](https://tellus.rs/docs/tutorials/getting-started/device-manager/): Put a manager on top of the groups and route messages through the actor tree.
 - [Stale readings](https://tellus.rs/docs/tutorials/getting-started/stale-readings/): Let devices forget old readings with a timer, which an actor opts into by its type.
 - [Event-sourced actors](https://tellus.rs/docs/tutorials/event-sourced-actors/): Make the devices survive restarts with event sourcing, in memory first, then in PostgreSQL.
 - [An event-sourced device](https://tellus.rs/docs/tutorials/event-sourced-actors/device/): Persist readings as events and recover the last one in a new actor system.

@@ -40,8 +40,9 @@ the second node's address and the seeds as arguments:
 
 {{<example path="tellus/examples/tutorials/clustered/01_two_nodes.rs" anchor="first-node"/>}}
 
-`cluster_state` returns a `tokio::sync::watch::Receiver` of the `ClusterState`, which changes
-whenever this node learns something new about the members. The first node waits until both
+`cluster_state` returns a `ClusterStateSubscription`, which hands out this node's current
+`ClusterState` and waits for a newer one. A new version is published whenever this node learns
+something new about the members. The first node waits until both
 members are up and prints how many there are.
 
 The second node reads exactly these arguments, joins and then waits:

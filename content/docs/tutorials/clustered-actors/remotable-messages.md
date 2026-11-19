@@ -20,11 +20,14 @@ for the device manager:
 
 {{<example path="tellus/examples/tutorials/clustered/02_remotable_messages.rs" anchor="device-manager-message"/>}}
 
-The serde derives make `DeviceManagerMessage` encodable. `Average` carries a `ReplyTo`, which is
-serializable too, so the reply finds its way back to the asking node. `Manifest` gives the message
-type a name that every node agrees on. A reference looked up by name needs it, so the receiving
-node can tell that the name means the same type there. The messages of the groups, devices and
-queries never leave the device manager's node, so they need neither serde nor a manifest.
+The serde derives make `DeviceManagerMessage` encodable. `Schema` versions the encoded shape, so a
+later version of the application can still talk to this one. The empty impl keeps the defaults,
+schema version 0. `Average` carries a `ReplyTo`, which is serializable too, so the reply finds its
+way back to the asking node. The reply, an `Option<f64>`, crosses the wire as well, and tellus
+implements `Schema` for it. `Manifest` gives the message type a name that every node agrees on. A
+reference looked up by name needs it, so the receiving node can tell that the name means the same
+type there. The messages of the groups, devices and queries never leave the device manager's node,
+so they need neither serde, `Schema` nor a manifest.
 
 ## The device manager node
 
@@ -78,7 +81,7 @@ reading, and the device manager's node logs that to stderr.
 
 ## What you learned
 
-Messages that cross the wire derive serde, and those looked up under a key also implement
-`Manifest`. `register` and `lookup_at` connect two nodes through a key, and `tell` and `ask` work
-on a remote reference as on a local one. Next, the first node finds the device manager without
-knowing where it runs.
+Messages that cross the wire derive serde and implement `Schema`, and those looked up under a key
+also implement `Manifest`. `register` and `lookup_at` connect two nodes through a key, and `tell`
+and `ask` work on a remote reference as on a local one. Next, the first node finds the device
+manager without knowing where it runs.
