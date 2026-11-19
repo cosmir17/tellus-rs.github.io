@@ -10,9 +10,9 @@ previous step. In this step the device manager stops on request, and its node le
 
 ## Stopping the device manager
 
-`Command` gets one more variant:
+`DeviceManagerMessage` gets one more variant:
 
-{{<example path="tellus/examples/tutorials/clustered/05_leave.rs" anchor="command"/>}}
+{{<example path="tellus/examples/tutorials/clustered/05_leave.rs" anchor="device-manager-message"/>}}
 
 The device manager answers `Stop` with `Control::Stop`. It is the root actor of its node's actor
 system, so the actor system terminates with it.

@@ -33,7 +33,7 @@ The program plays both nodes, and its first argument decides which one runs:
 {{<example path="tellus/examples/tutorials/clustered/01_two_nodes.rs" anchor="main"/>}}
 
 Started without arguments, it is the first node. The first node picks two free ports with the
-`reserved_addrs` helper, which lets the operating system choose them. Nothing holds the ports
+`free_addrs` helper, which lets the operating system choose them. Nothing holds the ports
 until the nodes bind them, so another process could take one in between. The first node then
 starts the second node with the `spawn_node` helper, which runs this program again with `node`,
 the second node's address and the seeds as arguments:

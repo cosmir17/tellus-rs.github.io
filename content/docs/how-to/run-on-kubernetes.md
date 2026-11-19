@@ -29,21 +29,21 @@ The `tellus-bootstrap-k8s` crate finds the peers by listing the pods that match 
 ```sh
 cargo add tellus --features cluster
 cargo add tellus-bootstrap-k8s
-cargo add k8s-openapi@0.28 --features v1_33
+cargo add k8s-openapi@0.29 --features v1_33
 ```
 
 The last line is not optional: `k8s-openapi` needs a feature that selects the Kubernetes API
 version, and only your binary can choose it. Its version has to match the one
-`tellus-bootstrap-k8s` depends on, here 0.28, or the build fails.
+`tellus-bootstrap-k8s` depends on, here 0.29, or the build fails.
 
 {{<example path="tellus-bootstrap-k8s/examples/how_to_run_on_kubernetes.rs" anchor="seeds"/>}}
 
 `K8sSeeds::new` lists the pods labeled `app=tellus` through the Kubernetes API, with the service
 account mounted into the pod, and pairs each pod's address with the port. `bootstrap` then forms or
-joins the cluster through them. It forms a new cluster only once the listing holds `min_peers`
+joins the cluster through them. It forms a new cluster only once the listing holds `min_nodes`
 addresses, here the three `replicas` of the manifest. Keep the two in sync:
 [Membership and downing](@/docs/explanation/membership-and-downing.md#what-this-means-for-your-deployment)
-explains why `min_peers` should exceed half the deployment. The listing sees a pod as soon as it
+explains why `min_nodes` should exceed half the deployment. The listing sees a pod as soon as it
 has an address, so the nodes find each other before any of them is ready. A headless Service lists
 only ready pods in DNS by default; with `publishNotReadyAddresses: true` it lists them earlier, and
 the DNS seeds of `tellus-bootstrap-dns` work as well.

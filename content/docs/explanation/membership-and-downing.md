@@ -134,7 +134,7 @@ the node afterward is cut off from the cluster.
 
 - Run at least three nodes if the cluster has to survive one of them failing.
 - Let discovery stop resolving nodes that are gone, so that bootstrap can finish.
-- Size `BootstrapConfig::min_peers` to more than half the deployment where you can. Then no two
+- Size `BootstrapConfig::min_nodes` to more than half the deployment where you can. Then no two
   nodes settle on disjoint views, but two views with different lowest addresses can still form two
   clusters.
 - Treat a non-empty `foreign_clusters` and a lasting broken link as alarms for an operator, see
