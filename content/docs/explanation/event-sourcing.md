@@ -53,10 +53,12 @@ command:
 An actor stopped before it ran skips recovery altogether, and one stopped during recovery never
 runs `recovered`.
 
-Replay runs the `apply` calls which the live actor ran, on the events as decoded from the store. So
-it reconstructs the state the actor had if every event and snapshot survives its codec's round
-trip. A lossy round trip, such as `Some(None)` or a `#[serde(skip)]` field, makes the two differ
-without any error. Replay also requires `apply` to be pure: no I/O, no clock, no randomness, and no
+Replay applies the events stored after the snapshot, as decoded from the store, with the same
+`apply`. That rebuilds the state the live actor had under two conditions: every event and snapshot
+survives its codec's round trip, and no append which failed in the live actor reached the store
+anyway. A lossy round trip, such as `Some(None)` or a `#[serde(skip)]` field, makes the two differ
+without any error. An append which failed but reached the store adds events which the live actor
+never applied. Replay also requires `apply` to be pure: no I/O, no clock, no randomness, and no
 failure. Anything which touches the world at start, such as spawning children, belongs in
 `recovered`.
 

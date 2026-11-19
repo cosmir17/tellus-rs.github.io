@@ -4,9 +4,10 @@ description = "How actors start, fail, restart and terminate, and in which order
 weight      = 6
 +++
 
-Every actor runs through the same lifecycle: it starts with `init`, handles messages with
-`receive`, and terminates. In between, it can fail. This page explains what tellus does at each of
-these points, and why.
+Every actor runs through the same lifecycle: it starts with `init`, handles messages with `receive`,
+and terminates. An actor stopped before it ran, by its parent or for the root by
+`ActorSystem::stop`, skips `init`. In between, it can fail. This page explains what tellus does at
+each of these points, and why.
 
 ## The actor tree
 
@@ -52,13 +53,14 @@ spawn.
 
 ## Stopping
 
-An actor stops when `receive` returns `Control::Stop`, when it fails under `Stop` or after its
-last allowed restart, or when its parent stops. For the root, `ActorSystem::stop` takes the
-parent's role. A stop never interrupts `receive`: the message being handled is finished first. An
-event-sourced actor also finishes settling its command, so its continuation, e.g. a reply, still
-runs. It waits at most the timeout of its `Persistence`, 10 s by default, for each store call. If
-the append exceeds it, the continuation does not run. A child its parent stops before it ran never
-runs `init`. It terminates as below, with no state to drop.
+An actor stops when `receive` returns `Control::Stop`, when it fails under `Stop` or after its last
+allowed restart, or when its parent stops. For the root, `ActorSystem::stop` takes the parent's
+role. A stop never interrupts `receive`: the message being handled is finished first. An
+event-sourced actor also finishes settling its command, so its continuation, e.g. a reply, runs once
+its events are durable and applied. Settling waits at most the timeout of its `Persistence`, 10 s by
+default, for each store call. An append which exceeds it fails the actor, and its continuation never
+runs. An actor stopped before it ran never runs `init`. It terminates as below, with no state to
+drop.
 
 ## Terminating, in order
 

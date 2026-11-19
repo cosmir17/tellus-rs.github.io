@@ -22,16 +22,17 @@ system, so the actor system terminates with it.
 {{<example path="tellus/examples/tutorials/clustered/05_leave.rs" anchor="manager-node"/>}}
 
 `leave_on_terminated` waits until the actor system has terminated and then leaves. The node
-announces its departure to every member and tries to drain what it still has queued for them,
-within its `leave_timeout`. A member acknowledges once those frames have reached its delivery path,
-a mailbox or a logged dead letter. That does not prove an actor has handled them. The call returns
-a `Departure`, which lists the members that acknowledged, those that did not, and those that left
-the cluster themselves before they acknowledged. A member may not acknowledge, for example, because
-its connection ended first or the timeout passed. tellus logs a warning naming the members that did
-not acknowledge, and members that left themselves only at info level. Leaving is final, like being
-downed: the node sends and admits nothing afterward. tellus does not end the process, so
-`manager_node` returns and the program exits. It fails unless every member acknowledged. Only a
-restarted process joins again, as a new node.
+announces its departure to every member and tries to drain what it still has queued for them, within
+its `leave_timeout`. A member acknowledges once those frames have reached its delivery path, a
+mailbox or a logged dead letter. That does not prove an actor has handled them. The call returns a
+`Departure`, which lists the members that acknowledged, those that did not, and those that left the
+cluster themselves before they acknowledged. A member may not acknowledge, for example, because its
+connection ended first or the timeout passed. tellus logs a warning naming the members that did not
+acknowledge. If the only ones missing left the cluster themselves, it logs them at info level
+instead. Either way they are listed in `Departure::departed`. Leaving is final, like being downed:
+the node sends and admits nothing afterward. tellus does not end the process, so `manager_node`
+returns and the program exits. It fails unless every member acknowledged. Only a restarted process
+joins again, as a new node.
 
 ## Watching a departure
 
