@@ -39,9 +39,11 @@ version, and only your binary can choose it. Its version has to match the one
 {{<example path="tellus-bootstrap-k8s/examples/how_to_run_on_kubernetes.rs" anchor="seeds"/>}}
 
 `K8sSeeds::new` lists the pods labeled `app=tellus` through the Kubernetes API, with the service
-account mounted into the pod, and pairs each pod's address with the port. `bootstrap` then forms or
-joins the cluster through them. It forms a new cluster only once the listing holds `min_nodes`
-addresses, here the three `replicas` of the manifest. Keep the two in sync:
+account mounted into the pod, and pairs each pod's address with the port. A listing which the API
+does not answer within `list_timeout`, five seconds by default, fails, and `bootstrap` tries again.
+`bootstrap` then forms or joins the cluster through the listed addresses. It forms a new cluster
+only once the listing holds `min_nodes` addresses, here the three `replicas` of the manifest. Keep
+the two in sync:
 [Membership and downing](@/docs/explanation/membership-and-downing.md#what-this-means-for-your-deployment)
 explains why `min_nodes` should exceed half the deployment. The listing sees a pod as soon as it
 has an address, so the nodes find each other before any of them is ready. A headless Service lists
@@ -97,11 +99,11 @@ downed node is out of the cluster for good, so it must not stay ready:
 
 {{<example path="tellus-bootstrap-k8s/examples/how_to_run_on_kubernetes.rs" anchor="await-downed"/>}}
 
-`cluster_state` returns a `tokio::sync::watch::Receiver`, so `wait_for` also sees a downing that
-happened before the wait began. The node is downed once its own entry is Down, or gone. The
-lifecycle above races that against SIGTERM. When the node is downed, it reports itself unready and
-exits with an error, without leaving: this node is no longer a member. Kubernetes restarts the
-container, and the new process joins as a new node.
+`cluster_state` returns a `ClusterStateSubscription`, whose `wait_for` tests the current state
+first, so it also sees a downing that happened before the wait began. The node is downed once its
+own entry is Down, or gone. The lifecycle above races that against SIGTERM. When the node is
+downed, it reports itself unready and exits with an error, without leaving: this node is no longer a
+member. Kubernetes restarts the container, and the new process joins as a new node.
 
 ## Mount a certificate per pod
 

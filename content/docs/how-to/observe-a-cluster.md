@@ -10,8 +10,8 @@ reach, and more. tellus offers that view as a value that changes over time, and 
 
 ## Read the current view
 
-`cluster::cluster_state` returns a `tokio::sync::watch::Receiver` of the `ClusterState`, or an error
-if the endpoint has not been started. The receiver's current value is this node's view, and
+`cluster::cluster_state` returns a `ClusterStateSubscription`, or an error if the endpoint has not
+been started. Its `current` answers this node's view, `changed` waits for a newer version, and
 `wait_for` waits for a view with a given property, as the
 [clustered actors tutorial](@/docs/tutorials/clustered-actors/_index.md) does. A `ClusterState`
 holds:
@@ -31,7 +31,7 @@ holds:
   until this node has formed or joined a cluster.
 
 Where the endpoint stands is not part of the view: `cluster::lifecycle` tells whether it is a
-member of no cluster yet, a member, or downed for good.
+member of no cluster yet, a member, or downed or left for good.
 
 ## Follow the transitions
 
@@ -42,8 +42,14 @@ order. `ClusterState::diff` compares two versions member by member:
 
 {{<example path="tellus/examples/how_to/observe_a_cluster.rs" anchor="describe"/>}}
 
-The first node remembers the previous version and prints what changed, while a second node joins,
-stays a second and leaves. `Change::Settled` and `Change::Gap` report the receptionist's verdict and
+{{<example path="tellus/examples/how_to/observe_a_cluster.rs" anchor="lifecycle"/>}}
+
+{{<example path="tellus/examples/how_to/observe_a_cluster.rs" anchor="health"/>}}
+
+The first node prints its lifecycle before and after it forms the cluster. It then remembers the
+previous version and prints what changed, while a second node joins, stays a second and leaves. It
+also prints every broken link and foreign cluster a new version reports; in this example there are
+none. `Change::Settled` and `Change::Gap` report the receptionist's verdict and
 a subscriber that fell behind; the example skips them. After a gap, the next state supersedes
 everything missed, so a diff against it is still correct.
 
@@ -54,6 +60,8 @@ cargo run --quiet -p tellus --features cluster-dev --example how_to_observe_a_cl
 ```
 
 ```txt
+first node: a member of no cluster yet
+first node: a member of a cluster
 second node: up
 second node: left
 ```
@@ -77,7 +85,11 @@ node needs only `cluster` and uses mutual TLS, see
 {{<example path="tellus-cluster-inspect/examples/how_to_serve_cluster_state.rs" anchor="main"/>}}
 
 Call `tellus_cluster_inspect::router` after `cluster::start_endpoint`, or it fails, and inside the
-Tokio runtime, since it spawns the task recording the changes. Mount the router into your own HTTP
+Tokio runtime, since it spawns the task recording the changes. Its second argument is a future on
+which the router shuts down: once it resolves, the recording task stops and every
+`/inspect/events` stream ends. A server which shuts down gracefully on the same signal then does
+not wait for the clients following the stream. The example never shuts down gracefully and hands
+it `future::pending()`. Mount the router into your own HTTP
 server. It brings no authentication and binds no port of its own. It reveals the cluster's
 topology, so mount it behind whatever protects the rest of your server.
 

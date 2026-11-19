@@ -66,10 +66,9 @@ its own. A write which never completes leaves the journal waiting forever. Only 
 
 Stopping an actor drops the messages still in its mailbox, and the journal's buffer goes with its
 state. tellus has no hook which runs when an actor stops, so the journal cannot write what remains
-on its own. In the example, the pause after the last burst gives the journal time to write
-everything before `main` stops the system. A real application drains the journal through its
-protocol instead. For example, the journal can handle a message after which it writes what remains
-and stops itself once the last `Written` has arrived.
+on its own. So it drains through its protocol: `Close` marks it as closing, and it stops itself once
+no write is in flight and the buffer is empty. `main` tells it `Close` after the last burst and
+waits until the actor system, whose root the journal is, has terminated.
 
 ## Run it
 

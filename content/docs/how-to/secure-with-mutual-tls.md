@@ -70,7 +70,8 @@ server_name = "tellus"
 ```
 
 `QuicTransport::from_config` reads and validates the files. It reads them once, so renewing a
-certificate takes a restart of the node.
+certificate takes a restart of the node. tellus does not check revocation, so a certificate stays
+trusted until it expires.
 
 ## Run it
 
