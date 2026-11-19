@@ -80,6 +80,11 @@ mailbox, the network adds its own reasons to drop it:
 
 tellus logs each of these as a dead letter, too.
 
+One failure to decode is no dead letter. The codec, postcard, has no limit on nesting. A message
+nested deeper than the receiving node can decode overflows the stack of the thread reading it, and
+that aborts the receiving node's process. So limit the depth of input taken from outside, such as
+a JSON document a client sent, before it goes into a message.
+
 The order holds per sender and recipient. When a connection breaks, tellus reconnects and delivers
 the messages queued meanwhile, in order. It does not replay the messages that were already handed to
 the broken connection, so some of them may be lost. Across a reconnect, messages hence arrive in

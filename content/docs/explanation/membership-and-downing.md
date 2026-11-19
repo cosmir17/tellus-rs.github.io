@@ -35,7 +35,8 @@ cluster yet. The other nodes join it.
 
 Why both conditions? The lowest address ensures that nodes sharing a set of seeds form one cluster,
 not several. The majority keeps a node that is cut off from the others from forming a cluster of
-its own when it restarts. Both make formation fail closed: while the lowest address does not
+its own when it restarts, as long as discovery resolves every node. A fixed list of seeds hence
+names all of them. Both make formation fail closed: while the lowest address does not
 answer, nothing forms. So discovery has to stop resolving nodes that are gone, or a cold start
 never finishes.
 

@@ -56,7 +56,9 @@ An actor stops when `receive` returns `Control::Stop`, when it fails under `Stop
 last allowed restart, or when its parent stops. For the root, `ActorSystem::stop` takes the
 parent's role. A stop never interrupts `receive`: the message being handled is finished first. An
 event-sourced actor also finishes settling its command, so its continuation, e.g. a reply, still
-runs.
+runs. It waits at most the timeout of its `Persistence`, 10 s by default, for each store call. If
+the append exceeds it, the continuation does not run. A child its parent stops before it ran never
+runs `init`. It terminates as below, with no state to drop.
 
 ## Terminating, in order
 

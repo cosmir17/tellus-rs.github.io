@@ -57,6 +57,6 @@ changes, but the returned state selects the arms which apply to the next message
 of behavior the model describes.
 
 The state is also what the other parts of tellus build on. An event-sourced actor folds its
-events into the state with `apply`, and its recovery rebuilds exactly that state. A unit test
+events into the state with `apply`, and its recovery rebuilds that state. A unit test
 calls `receive` with a state and compares the returned one, as shown in
 [Unit test an actor](@/docs/how-to/unit-test.md).

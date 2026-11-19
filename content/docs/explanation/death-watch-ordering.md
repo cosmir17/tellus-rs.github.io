@@ -83,8 +83,9 @@ no message from that actor is delivered on this node again. That is still enough
 guarantee is used for, such as a query that stops waiting for an answer that cannot come anymore.
 
 Two more cases fire a synthesized signal without a downing, and they do not carry even that
-promise. In the first, the watch cannot be sent: toward an address tellus refuses, toward a
-connection bound to another incarnation, or while this node is downed or leaving. In the second,
+promise. In the first, the watch cannot be sent: toward an address tellus refuses, toward another
+incarnation at this node's own address, toward a connection bound to another incarnation, or while
+this node is downed or leaving. In the second,
 tellus gives up connecting to an address that no member advertises, and signals every actor watched
 there. Neither case marks the watched node down, so a message from the actor may still arrive
 afterward. The API does not tell these signals apart from the others.

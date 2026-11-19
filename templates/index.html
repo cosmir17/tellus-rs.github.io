@@ -153,7 +153,7 @@
       <div class="split">
         <div class="prose">
           <h2>Persist the events, replay the state.</h2>
-          <p>Implement <code>EventSourced</code> instead of <code>Actor</code>. Your handler validates a command and returns an <code>Effect</code> naming the events it causes. tellus appends them to the store, and only then folds them into the state. After a crash, replay rebuilds exactly the same state, optionally shortcut by a snapshot.</p>
+          <p>Implement <code>EventSourced</code> instead of <code>Actor</code>. Your handler validates a command and returns an <code>Effect</code> naming the events it causes. tellus appends them to the store, and only then folds them into the state. After a crash, replay rebuilds the state from the events, optionally shortcut by a snapshot.</p>
           <p>Conditional appends fence concurrent incarnations, and manifests version your event schemas. A contract test suite checks any store backend. PostgreSQL ships today in <code>tellus-persistence-postgres</code>; an in-memory store and <code>TestContext</code> let you test without a database.</p>
           <a class="more" href="{{ get_url(path="@/docs/explanation/event-sourcing.md") }}">What tellus guarantees about event sourcing →</a>
         </div>
@@ -183,7 +183,7 @@
       <div class="terminal">
         <div class="term-bar"><i></i><i></i><i></i><span>tellus-cluster-demo-tui · 5 nodes · chaos on</span></div>
         <div class="term-player" id="cluster-demo" data-cast="{{ get_url(path='casts/cluster-demo.cast') }}"></div>
-        <p class="term-caption">Five nodes under continuous crashes, departures and partitions, with a verifier checking convergence, cross-node messaging and the receptionist in every quiet window. <a href="{{ config.extra.repo }}/tree/main/tellus-cluster-demo">Run it yourself</a>.</p>
+        <p class="term-caption">Five nodes under continuous crashes, departures, partitions and rolling upgrades, with a verifier checking convergence, cross-node messaging and the receptionist in every quiet window. <a href="{{ config.extra.repo }}/tree/main/tellus-cluster-demo">Run it yourself</a>.</p>
       </div>
 
       <div class="features">
