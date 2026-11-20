@@ -50,14 +50,28 @@ command:
 2. The events after the snapshot are read in order and applied with `apply`.
 3. `recovered` runs once on the result.
 
-Replay runs exactly the `apply` calls which the live actor ran, so it reconstructs exactly the
-state the actor had. That requires `apply` to be pure: no I/O, no clock, no randomness, and no
+An actor stopped before it ran skips recovery altogether, and one stopped during recovery never
+runs `recovered`.
+
+Replay applies the events stored after the snapshot, as decoded from the store, with the same
+`apply`. That rebuilds the state the live actor had under two conditions: every event and snapshot
+survives its codec's round trip, and no append which failed in the live actor reached the store
+anyway. A lossy round trip, such as `Some(None)` or a `#[serde(skip)]` field, makes the two differ
+without any error. An append which failed but reached the store adds events which the live actor
+never applied. Replay also requires `apply` to be pure: no I/O, no clock, no randomness, and no
 failure. Anything which touches the world at start, such as spawning children, belongs in
 `recovered`.
 
 A restart under supervision is a recovery too. That also resolves an uncertain append: if the
-events reached the store before the failure, replay applies them, and if not, they were never
-applied.
+events reached the store before the replay reads the stream, replay applies them, and if not, they
+were never applied. An append which reaches the store only after the replay leaves events in the
+stream which are not in the state, and the next append conflicts.
+
+tellus bounds every store call by the timeout of its `Persistence`, 10 s unless `with_timeout` sets
+another. It gives up on a call by dropping it, which ends nothing the call has started in the
+store: an append it gave up on may still store its events, even after the replay. So a store bounds
+its own calls below that timeout, as the
+[PostgreSQL tutorial](@/docs/tutorials/event-sourced-actors/postgres.md) shows.
 
 ## Snapshots
 

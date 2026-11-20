@@ -46,8 +46,8 @@ Every guarantee on these pages is written down as a contract in the
 [internals documentation](https://github.com/tellus-rs/tellus/tree/main/docs), and the integration
 tests encode them. A
 [demo cluster](https://github.com/tellus-rs/tellus/tree/main/tellus-cluster-demo) of five nodes
-runs under continuous kills, departures and partitions, while a verifier checks after every fault
-that the cluster has recovered. Benchmarks run on every pull request.
+runs under continuous kills, departures, partitions and rolling upgrades, while a verifier checks
+after every fault that the cluster has recovered. Benchmarks run on every pull request.
 
 ## Compared with other Rust actor frameworks
 
@@ -96,6 +96,7 @@ running out of memory takes the whole node down. And Erlang loads new code into 
 | `SupervisorStrategy.restartWithBackoff` | supervisor | `SupervisionStrategy::Restart(RestartPolicy)` |
 | `pipeToSelf` | | `context.pipe_to_self` |
 | timers | `erlang:send_after` | `type Timers = Timed`, `context.start_timer` |
+| `StashBuffer` | | `type Stash = Stashed`, `context.stash`, `context.unstash_all` |
 | `Receptionist` | `pg` | `cluster::register`, `receptionist::lookup` |
 | Distributed Publish Subscribe (`Topic`) | `pg` | `pubsub::subscribe`, `pubsub::publish` |
 | Split Brain Resolver, keep majority | | downing provider `KeepMajority` |

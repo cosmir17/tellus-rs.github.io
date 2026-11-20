@@ -95,8 +95,8 @@
         </div>
         <div>
           <span class="tag">unwatch</span>
-          <h3>Absolute</h3>
-          <p>After <code>unwatch</code> returns, you never receive a terminated signal for that actor, even if one was already enqueued.</p>
+          <h3>No stale signals</h3>
+          <p>After <code>unwatch</code> returns, you never receive a terminated signal for that actor, even if one was already enqueued, unless you stash it yourself.</p>
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@
       <div class="split">
         <div class="prose">
           <h2>Persist the events, replay the state.</h2>
-          <p>Implement <code>EventSourced</code> instead of <code>Actor</code>. Your handler validates a command and returns an <code>Effect</code> naming the events it causes. tellus appends them to the store, and only then folds them into the state. After a crash, replay rebuilds exactly the same state, optionally shortcut by a snapshot.</p>
+          <p>Implement <code>EventSourced</code> instead of <code>Actor</code>. Your handler validates a command and returns an <code>Effect</code> naming the events it causes. tellus appends them to the store, and only then folds them into the state. After a crash, replay rebuilds the state from the events, optionally shortcut by a snapshot.</p>
           <p>Conditional appends fence concurrent incarnations, and manifests version your event schemas. A contract test suite checks any store backend. PostgreSQL ships today in <code>tellus-persistence-postgres</code>; an in-memory store and <code>TestContext</code> let you test without a database.</p>
           <a class="more" href="{{ get_url(path="@/docs/explanation/event-sourcing.md") }}">What tellus guarantees about event sourcing →</a>
         </div>

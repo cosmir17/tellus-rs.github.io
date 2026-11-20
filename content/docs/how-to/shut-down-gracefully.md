@@ -1,7 +1,7 @@
 +++
 title       = "Shut down gracefully"
 description = "Take a node out of the load balancer's rotation, drain its requests, leave the cluster and exit."
-weight      = 7
+weight      = 8
 +++
 
 A node that is stopped should neither fail the requests a load balancer still sends it nor leave the
@@ -23,7 +23,7 @@ checks it periodically and stops sending requests to a node that fails it.
 {{<example path="tellus/examples/how_to/shut_down_gracefully.rs" anchor="shutdown-signal"/>}}
 
 Kubernetes, Docker and systemd stop a process with SIGTERM; Ctrl-C sends SIGINT. The node treats
-both alike.
+both alike. On platforms other than Unix, it waits for Ctrl-C alone.
 
 ## Shut down in order
 
@@ -38,7 +38,8 @@ both alike.
    kube-proxy, ingresses and external load balancers need to stop routing to the pod. The example
    lingers for five.
 3. It tells the HTTP server to shut down gracefully: the server accepts no new connections and
-   waits for the requests in flight, bounded by a drain timeout.
+   waits for the requests in flight, bounded by a drain timeout. If requests are still in flight
+   when it passes, the node goes on regardless.
 4. It stops its actor system and leaves the cluster. `leave_on_terminated` first waits for the actor
    system to terminate, without a deadline of its own, and then tries to drain what the node still
    has queued for the other members, within `EndpointConfig::leave_timeout`. The other members list

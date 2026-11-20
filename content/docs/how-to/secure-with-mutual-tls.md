@@ -1,7 +1,7 @@
 +++
 title       = "Secure with mutual TLS"
 description = "Authenticate every node with a certificate from the cluster's own certificate authority, bound to its address."
-weight      = 9
+weight      = 10
 +++
 
 The `cluster-dev` transport checks no certificates, so anyone who can reach a node's port can talk
@@ -70,7 +70,8 @@ server_name = "tellus"
 ```
 
 `QuicTransport::from_config` reads and validates the files. It reads them once, so renewing a
-certificate takes a restart of the node.
+certificate takes a restart of the node. tellus does not check revocation, so a certificate stays
+trusted until it expires.
 
 ## Run it
 

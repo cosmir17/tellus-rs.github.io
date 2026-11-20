@@ -1,11 +1,11 @@
 +++
 title       = "A device manager"
-description = "Put a manager on top of the groups and route commands through the actor tree."
+description = "Put a manager on top of the groups and route messages through the actor tree."
 weight      = 7
 +++
 
 A building has more than one room. In this step a device manager sits on top: it spawns a group
-per room on demand and routes every command to the right group. The groups, the devices and
+per room on demand and routes every message to the right group. The groups, the devices and
 the query actor are those from the previous step, unchanged.
 
 ## The manager
@@ -13,7 +13,7 @@ the query actor are those from the previous step, unchanged.
 {{<example path="tellus/examples/tutorials/getting_started/07_device_manager.rs" anchor="manager"/>}}
 
 The manager follows the same pattern as the group one level below: a map from names to
-`ActorRef`s, filled on demand with `context.spawn`. Every command names its group, and the manager
+`ActorRef`s, filled on demand with `context.spawn`. Every message names its group, and the manager
 forwards the rest of it.
 
 For `Average`, the request's `ReplyTo` now travels two levels down: from the manager to the group,
