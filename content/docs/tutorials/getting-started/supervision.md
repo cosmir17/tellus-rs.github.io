@@ -11,7 +11,7 @@ such a reading makes the device fail, and tellus restarts it.
 
 {{<example path="tellus/examples/tutorials/getting_started/06_supervision.rs" anchor="device"/>}}
 
-The device's `Error` type is now `InvalidReading` instead of `Infallible`, a unit struct deriving
+The device's `Error` type is now `InvalidReading` instead of `!`, a unit struct deriving
 `thiserror::Error`. For a reading that is not a number, `receive` returns `Err(InvalidReading)`.
 You can also use `?` to escalate a failure the same way. A panic in `receive` counts as a failure,
 too.

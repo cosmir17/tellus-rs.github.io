@@ -35,7 +35,8 @@ cluster yet. The other nodes join it.
 
 Why both conditions? The lowest address ensures that nodes sharing a set of seeds form one cluster,
 not several. The majority keeps a node that is cut off from the others from forming a cluster of
-its own when it restarts. Both make formation fail closed: while the lowest address does not
+its own when it restarts, as long as discovery resolves every node. A fixed list of seeds hence
+names all of them. Both make formation fail closed: while the lowest address does not
 answer, nothing forms. So discovery has to stop resolving nodes that are gone, or a cold start
 never finishes.
 
@@ -134,7 +135,7 @@ the node afterward is cut off from the cluster.
 
 - Run at least three nodes if the cluster has to survive one of them failing.
 - Let discovery stop resolving nodes that are gone, so that bootstrap can finish.
-- Size `BootstrapConfig::min_peers` to more than half the deployment where you can. Then no two
+- Size `BootstrapConfig::min_nodes` to more than half the deployment where you can. Then no two
   nodes settle on disjoint views, but two views with different lowest addresses can still form two
   clusters.
 - Treat a non-empty `foreign_clusters` and a lasting broken link as alarms for an operator, see

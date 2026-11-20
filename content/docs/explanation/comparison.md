@@ -6,7 +6,7 @@ weight      = 9
 
 Rust has several actor frameworks. This page compares tellus with three widely used ones:
 [actix](https://crates.io/crates/actix), [kameo](https://crates.io/crates/kameo) and
-[ractor](https://crates.io/crates/ractor). It describes tellus 0.5.2, and actix 0.13.5, kameo
+[ractor](https://crates.io/crates/ractor). It describes tellus 0.6.0, and actix 0.13.5, kameo
 0.22.2 and ractor 0.16.5 as of October 2026. The facts about the other three come from their own
 documentation and source code.
 

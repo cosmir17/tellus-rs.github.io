@@ -24,8 +24,8 @@ by a snapshot. The device offers one after every third reading.
 {{<example path="tellus/examples/tutorials/event_sourced/03_snapshots.rs" anchor="init"/>}}
 
 On recovery, if there is a snapshot, `init_from_snapshot` turns it into the state, and only the
-events after the snapshot are replayed. Without a snapshot, `init` is the starting point, as
-before. `init` must stay pure, because it is skipped as soon as a snapshot exists. Work which
+events after the snapshot are replayed. Without a snapshot, `init` is the starting point, as before.
+`init` must stay pure, because it is skipped whenever a snapshot is loaded and used. Work which
 touches the world at start, like spawning children, belongs in `recovered`, which runs after every
 recovery.
 

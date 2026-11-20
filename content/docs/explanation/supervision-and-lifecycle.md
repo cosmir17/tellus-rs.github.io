@@ -4,9 +4,10 @@ description = "How actors start, fail, restart and terminate, and in which order
 weight      = 6
 +++
 
-Every actor runs through the same lifecycle: it starts with `init`, handles messages with
-`receive`, and terminates. In between, it can fail. This page explains what tellus does at each of
-these points, and why.
+Every actor runs through the same lifecycle: it starts with `init`, handles messages with `receive`,
+and terminates. An actor stopped before it ran, by its parent or for the root by
+`ActorSystem::stop`, skips `init`. In between, it can fail. This page explains what tellus does at
+each of these points, and why.
 
 ## The actor tree
 
@@ -34,7 +35,11 @@ terminates, from the [watching step](@/docs/tutorials/getting-started/watch.md) 
 
 The mailbox survives. Messages which arrived behind the failing message, or arrive during the
 backoff, are handled by the restarted actor. The failing message itself is not delivered again.
-Watches survive, too. Timers do not: a restart cancels all of the actor's timers.
+The stash survives as well: the restarted actor receives every stashed item first, in order, after
+`init`, or after recovery and `recovered` for an event-sourced actor. The stash requests made while
+handling the failing message are discarded with it. An event-sourced actor which fails once the
+command's events are durable keeps them. Watches survive, too. Timers do not: a restart cancels
+all of the actor's timers.
 
 ## Restarts are limited
 
@@ -52,19 +57,22 @@ spawn.
 
 ## Stopping
 
-An actor stops when `receive` returns `Control::Stop`, when it fails under `Stop` or after its
-last allowed restart, or when its parent stops. For the root, `ActorSystem::stop` takes the
-parent's role. A stop never interrupts `receive`: the message being handled is finished first. An
-event-sourced actor also finishes settling its command, so its continuation, e.g. a reply, still
-runs.
+An actor stops when `receive` returns `Control::Stop`, when it fails under `Stop` or after its last
+allowed restart, or when its parent stops. For the root, `ActorSystem::stop` takes the parent's
+role. A stop never interrupts `receive`: the message being handled is finished first. An
+event-sourced actor also finishes settling its command, so its continuation, e.g. a reply, runs once
+its events are durable and applied. Settling waits at most the timeout of its `Persistence`, 10 s by
+default, for each store call. An append which exceeds it fails the actor, and its continuation never
+runs. An actor stopped before it ran never runs `init`. It terminates as below, with no state to
+drop.
 
 ## Terminating, in order
 
 Termination releases the actor's resources in a fixed order:
 
 1. The state is dropped, so its destructors run.
-2. The mailbox is closed, and the queued messages are dropped. An `ask` among them fails with
-   `AskError::NoReply`.
+2. The mailbox is closed, and the queued messages are dropped, the stashed ones with them. An
+   `ask` among them fails with `AskError::NoReply`.
 3. The children stop, recursively, and the actor waits until all of them have terminated.
 4. The actor value is dropped.
 5. The watchers receive the terminated signal.
