@@ -44,14 +44,14 @@ Key facts for writing tellus code:
 
 - [Call async code from an actor](https://tellus.rs/docs/how-to/call-async-code/): Run a database query or an HTTP request for an actor and get the result back as a message.
 - [Defer messages while an actor waits](https://tellus.rs/docs/how-to/defer-messages/): Stash the requests which arrive while an actor waits for a piped future, and answer them in order once it has what it needs.
+- [Apply backpressure](https://tellus.rs/docs/how-to/apply-backpressure/): Keep a fast producer from overwhelming slow actors with work pulling, and bound mailboxes safely.
 - [Unit test an actor](https://tellus.rs/docs/how-to/unit-test/): Test receive, handle and apply as plain functions with TestContext, without an actor system.
 - [Configure an actor from a file](https://tellus.rs/docs/how-to/configure-supervision/): Load mailbox capacity and supervision from a config file instead of hard-coding them.
-- [Apply backpressure](https://tellus.rs/docs/how-to/apply-backpressure/): Keep a fast producer from overwhelming slow actors with work pulling, and bound mailboxes safely.
 - [Batch writes](https://tellus.rs/docs/how-to/batch-writes/): Write buffered entries in batches, without blocking, starting a write once the mailbox has run empty.
 - [Run on Kubernetes](https://tellus.rs/docs/how-to/run-on-kubernetes/): Run cluster nodes as pods: advertise the pod's address, find the peers by label, report readiness and leave on termination.
-- [Shut down gracefully](https://tellus.rs/docs/how-to/shut-down-gracefully/): Take a node out of the load balancer's rotation, drain its requests, leave the cluster and exit.
-- [Observe a cluster](https://tellus.rs/docs/how-to/observe-a-cluster/): Follow the membership as it changes, and serve a node's view of its cluster over HTTP.
 - [Secure with mutual TLS](https://tellus.rs/docs/how-to/secure-with-mutual-tls/): Authenticate every node with a certificate from the cluster's own certificate authority, bound to its address.
+- [Observe a cluster](https://tellus.rs/docs/how-to/observe-a-cluster/): Follow the membership as it changes, and serve a node's view of its cluster over HTTP.
+- [Shut down gracefully](https://tellus.rs/docs/how-to/shut-down-gracefully/): Take a node out of the load balancer's rotation, drain its requests, leave the cluster and exit.
 
 ## Explanation
 
