@@ -49,6 +49,7 @@ Key facts for writing tellus code:
 - [Passivate idle entities](https://tellus.rs/docs/how-to/passivate-idle-entities/): Spawn one actor per key on its first message with a Host, and stop it again once no message has been routed to it for a while.
 - [Configure an actor from a file](https://tellus.rs/docs/how-to/configure-supervision/): Load mailbox capacity and supervision from a config file instead of hard-coding them.
 - [Batch writes](https://tellus.rs/docs/how-to/batch-writes/): Write buffered entries in batches, without blocking, starting a write once the mailbox has run empty.
+- [Evolve events](https://tellus.rs/docs/how-to/evolve-events/): Change the shape of a stored event and let the new release read the old events by upcasting them while it replays.
 - [Run on Kubernetes](https://tellus.rs/docs/how-to/run-on-kubernetes/): Run cluster nodes as pods: advertise the pod's address, find the peers by label, report readiness and leave on termination.
 - [Secure with mutual TLS](https://tellus.rs/docs/how-to/secure-with-mutual-tls/): Authenticate every node with a certificate from the cluster's own certificate authority, bound to its address.
 - [Observe a cluster](https://tellus.rs/docs/how-to/observe-a-cluster/): Follow the membership as it changes, and serve a node's view of its cluster over HTTP.
